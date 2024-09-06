@@ -20,20 +20,18 @@ const LandingPage = () => {
         <div className={`${darkMode ? 'dark' : ''}`}>
             {/* Background gradient and container */}
             <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
-                {/* Hero Section */}
-                <section className="flex flex-col items-center justify-center text-center py-20 space-y-6 relative">
+                <section className="relative w-full">
                     {/* Image Container */}
-                    <div className="flex max-w-screen-xl w-full relative">
-                        <div className="flex-auto h-105 w-full">
-                            <motion.img
-//                                 initial={{x: 100, opacity: 0}}
-//                                 animate={{x: 0, opacity: 1}}
-//                                 transition={{duration: 1, delay: 1.2}}
-                                src={img}
-                                alt="image"
-                                className="w-full object-cover"
-                            />
-                        </div>
+                    <div className="relative w-full h-96 md:h-[700px] lg:h-[700px] overflow-hidden">
+                        <motion.img
+                            src={img}
+                            alt="Hero Background"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center py-20 space-y-6">
+                        <h1 className="text-4xl font-bold">Welcome to BitSpin365</h1>
+                        <p className="text-xl">Your ultimate destination for online gaming</p>
                     </div>
                 </section>
 
@@ -52,6 +50,7 @@ const LandingPage = () => {
                     <h3 className="text-3xl font-bold mb-10">Roulette Games</h3>
                     <GameCarousel/>
                 </section>
+
                 {/* Jackpot Section */}
                 <JackpotSection/>
 
@@ -64,7 +63,7 @@ const LandingPage = () => {
                 <section className="py-16 px-4">
                     <h3 className="text-3xl font-bold mb-10">User Feedback</h3>
                     <motion.div
-                        className="flex space-x-6 overflow-x-auto py-4 scrollbar-hide"
+                        className="flex space-x-6 overflow-hidden py-4"
                         whileTap={{ cursor: "grabbing" }}
                         transition={{ ease: "easeOut", duration: 0.5 }}
                     >
@@ -99,6 +98,7 @@ const LandingPage = () => {
                         {/*</div>*/}
                     </div>
                 </section>
+
                 {/* Features Section */}
                 <section className="py-16 px-4 text-center">
                     <h3 className="text-3xl font-bold mb-10">Why Choose Us?</h3>
