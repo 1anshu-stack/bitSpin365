@@ -69,13 +69,15 @@ const Signup = ({ onClose }) => {
                     <div className="flex-shrink-0 w-1/2 relative">
                         <img src={casino} alt="Casino background" className="w-full h-full object-cover" />
                     </div>
-                    <form ref={formRef} className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto" onSubmit={handleSubmit}>
-                        <button type="button" className="absolute top-4 right-4 text-2xl font-bold z-20" onClick={() => setShowExitConfirmation(true)}>
+                    <form ref={formRef} className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto"
+                          onSubmit={handleSubmit}>
+                        <button type="button" className="absolute top-4 right-4 text-2xl font-bold z-20"
+                                onClick={() => setShowExitConfirmation(true)}>
                             X
                         </button>
                         <h2 className="text-2xl font-bold mb-5">Sign Up</h2>
                         <div className="relative mb-4">
-                            <FaEnvelope className="absolute top-3 left-3 text-gray-400" />
+                            <FaEnvelope className="absolute top-3 left-3 text-gray-400"/>
                             <input
                                 type="email"
                                 name="email"
@@ -86,7 +88,7 @@ const Signup = ({ onClose }) => {
                             />
                         </div>
                         <div className="relative mb-4">
-                            <FaLock className="absolute top-3 left-3 text-gray-400" />
+                            <FaLock className="absolute top-3 left-3 text-gray-400"/>
                             <input
                                 type={passwordVisible ? 'text' : 'password'}
                                 name="password"
@@ -100,7 +102,8 @@ const Signup = ({ onClose }) => {
                                 className="absolute top-3 right-3"
                                 onClick={() => setPasswordVisible(!passwordVisible)}
                             >
-                                {passwordVisible ? <FaEyeSlash className="text-gray-400" /> : <FaEye className="text-gray-400" />}
+                                {passwordVisible ? <FaEyeSlash className="text-gray-400"/> :
+                                    <FaEye className="text-gray-400"/>}
                             </button>
                         </div>
                         {errors.password && <p className="text-red-500 mb-4 text-sm">{errors.password}</p>}
@@ -112,23 +115,18 @@ const Signup = ({ onClose }) => {
                                 onChange={handleChange}
                                 className="mr-2"
                             />
+                            I agree to the <b>Terms & Conditions</b> and <b>Privacy Policy</b>
+                        </label>
+                        <label className="flex items-center mb-4">
+                            <input
+                                type="checkbox"
+                                name="is18OrAbove"
+                                checked={formData.is18OrAbove}
+                                onChange={handleChange}
+                                className="mr-2"
+                            />
                             I am 18 years or above
                         </label>
-                        <select
-                            name="currency"
-                            value={formData.currency}
-                            onChange={handleChange}
-                            className="p-2 mb-4 border border-gray-400 rounded"
-                        >
-                            <option value="">Select Currency</option>
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="GBP">GBP</option>
-                            <option value="INR">INR</option>
-                            <option value="JPY">JPY</option>
-                            <option value="AUD">AUD</option>
-                            <option value="CAD">CAD</option>
-                        </select>
                         <button type="submit" className="bg-orange-500 text-white p-2 rounded mb-4">
                             Sign Up
                         </button>
