@@ -13,8 +13,13 @@ const LandingPage = () => {
         { name: 'Alice', rating: 5, feedback: 'Amazing experience, would highly recommend!' },
         { name: 'Bob', rating: 4, feedback: 'Great games and user-friendly interface.' },
         { name: 'Charlie', rating: 5, feedback: 'The best platform for online gaming!' },
+        { name: 'Charlie', rating: 5, feedback: 'The best platform for online gaming!' },
+        { name: 'Charlie', rating: 5, feedback: 'The best platform for online gaming!' },
+        { name: 'Charlie', rating: 5, feedback: 'The best platform for online gaming!' },
+        { name: 'Charlie', rating: 5, feedback: 'The best platform for online gaming!' },
         // Add more feedbacks as needed
     ];
+    const extendedFeedbacks = [...feedbacks, ...feedbacks, ...feedbacks];
 
     return (
         <div className={`${darkMode ? 'dark' : ''}`}>
@@ -59,28 +64,34 @@ const LandingPage = () => {
                     <h3 className="text-3xl font-bold mb-10">Live Casino</h3>
                     <GameCarousel/>
                 </section>
-
-                {/* Feedback Section */}
                 <section className="py-16 px-4">
-                    <h3 className="text-3xl font-bold mb-10">User Feedback</h3>
-                    <motion.div
-                        className="flex space-x-6 overflow-x-auto py-4 scrollbar-hide"
-                        whileTap={{ cursor: "grabbing" }}
-                        transition={{ ease: "easeOut", duration: 0.5 }}
-                    >
-                        {feedbacks.map((feedback, index) => (
-                            <motion.div
-                                key={index}
-                                className="flex-shrink-0"
-                                initial={{ opacity: 0, x: 100 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.2 }}
-                            >
-                                <FeedbackCard {...feedback} />
-                            </motion.div>
-                        ))}
-                    </motion.div>
+                     <h3 className="text-3xl font-bold mb-10">User Feedback</h3>
+                     <div className="relative h-64 overflow-hidden">
+                         <motion.div
+                             className="flex space-x-6 py-4 absolute top-0 scrollbar-hide"
+                             animate={{ x: ['0%', '-100%'] }}
+                             transition={{
+                                     repeat: Infinity,
+                                     duration: 20,
+                                     ease: 'linear'
+                             }}
+                         >
+                             {feedbacks.map((feedback, index) => (
+                                 <motion.div
+                                    key={index}
+                                    className="flex-shrink-0 w-80"
+                                    initial={{opacity: 0, x: 100}}
+                                    animate={{opacity: 1, x: 0}}
+                                    transition={{duration: 0.5, delay: index * 0.1}}
+                                    whileHover={{ scale: 1.05, y: -5 }}
+                                 >
+                                     <FeedbackCard {...feedback} />
+                                 </motion.div>
+                             ))}
+                         </motion.div>
+                   </div>
                 </section>
+
 
                 <section className="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 py-16 px-6 text-center">
                     <div className="container mx-auto">
