@@ -26,9 +26,9 @@ const LandingPage = () => {
                     <div className="flex max-w-screen-xl w-full relative">
                         <div className="flex-auto h-105 w-full">
                             <motion.img
-                                initial={{x: 100, opacity: 0}}
-                                animate={{x: 0, opacity: 1}}
-                                transition={{duration: 1, delay: 1.2}}
+//                                 initial={{x: 100, opacity: 0}}
+//                                 animate={{x: 0, opacity: 1}}
+//                                 transition={{duration: 1, delay: 1.2}}
                                 src={img}
                                 alt="image"
                                 className="w-full object-cover"
