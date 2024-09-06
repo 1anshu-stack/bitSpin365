@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaTrophy, FaQuestionCircle, FaStar } from 'react-icons/fa';
 import Login from './Login';
 import Signup from './Signup';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [showLogin, setShowLogin] = useState(false); // State to manage Login modal visibility
-    const [showSignup, setShowSignup] = useState(false); // State to manage Signup modal visibility
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
+    const [promotionsOpen, setPromotionsOpen] = useState(false);
+    const [supportOpen, setSupportOpen] = useState(false);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+        document.body.style.overflow = menuOpen ? 'auto' : 'hidden';
+    };
+
+    const togglePromotions = () => {
+        setPromotionsOpen(!promotionsOpen);
+        setSupportOpen(false); // Close support dropdown if promotions is opened
+    };
+
+    const toggleSupport = () => {
+        setSupportOpen(!supportOpen);
+        setPromotionsOpen(false); // Close promotions dropdown if support is opened
     };
 
     const openLogin = () => {
@@ -27,65 +41,133 @@ const Header = () => {
         setShowSignup(false);
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.dropdown-menu') && !event.target.closest('.menu-icon')) {
+                setMenuOpen(false);
+                document.body.style.overflow = 'auto';
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <header className="fixed top-0 left-0 w-full bg-gradient-to-br from-gray-800 to-gray-900 py-4 px-8 z-50 shadow-md">
+        <header className="fixed top-0 left-0 w-full bg-gradient-to-br from-blue-800 to-purple-900 py-4 px-8 z-50 shadow-lg">
             <div className="flex justify-between items-center">
-                <div className="menu-icon flex flex-col cursor-pointer text-yellow-500" onClick={toggleMenu}>
-                    <div className="bar w-6 h-1 bg-yellow-500 rounded mb-2"></div>
-                    <div className="bar w-6 h-1 bg-yellow-500 rounded mb-2"></div>
-                    <div className="bar w-6 h-1 bg-yellow-500 rounded"></div>
+                <div className="menu-icon flex flex-col cursor-pointer text-yellow-300" onClick={toggleMenu}>
+                    <div className="bar w-8 h-1 bg-yellow-300 rounded mb-1 transition-transform duration-300 ease-in-out" style={{ transform: menuOpen ? 'rotate(45deg) translateY(6px)' : 'rotate(0)' }}></div>
+                    <div className="bar w-8 h-1 bg-yellow-300 rounded mb-1" style={{ opacity: menuOpen ? '0' : '1' }}></div>
+                    <div className="bar w-8 h-1 bg-yellow-300 rounded" style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-6px)' : 'rotate(0)' }}></div>
                 </div>
                 <div className="logo">
-                    <h1 className="text-2xl font-cursive text-yellow-300">BitSpin365</h1>
+                    <h1 className="text-3xl font-bold text-yellow-300">BitSpin365</h1>
                 </div>
                 <div className="nav-buttons flex gap-4">
-                    <button className="nav-button py-2 px-4 bg-red-600 text-white rounded hover:bg-red-500 transition duration-300" onClick={openLogin}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openLogin}>
                         Login
                     </button>
-                    <button className="nav-button py-2 px-4 bg-red-600 text-white rounded hover:bg-red-500 transition duration-300" onClick={openSignup}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openSignup}>
                         Signup
                     </button>
                 </div>
             </div>
+
             {menuOpen && (
-                <nav className="dropdown-menu absolute top-full left-0 w-48 bg-gray-800 border border-gray-700 shadow-lg z-10 transition duration-500">
-                    <ul>
-                        <li className="py-2 px-4 border-b border-gray-700">
-                            <a href="/" className="text-yellow-500 hover:text-white transition duration-200">
-                                Home
-                            </a>
+                <nav
+                    className="dropdown-menu fixed top-0 left-0 w-[30%] h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col">
+                    <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700">
+                        <h1 className="text-2xl font-bold text-yellow-300">BitSpin365</h1>
+                        <button onClick={toggleMenu} className="text-white text-3xl">&times;</button>
+                    </div>
+                    <ul className="flex flex-col mt-4 px-4 space-y-2">
+                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaHome className="text-yellow-300 mr-3"/>
+                            <a href="/" className="text-yellow-300">Home</a>
                         </li>
-                        <li className="py-2 px-4 border-b border-gray-700">
-                            <a href="/games" className="text-yellow-500 hover:text-white transition duration-200">
-                                Games
-                            </a>
+                        <li className="relative py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaGift className="text-yellow-300 mr-3"/>
+                            <div className="flex justify-between items-center w-full cursor-pointer"
+                                 onClick={togglePromotions}>
+                                <span className="text-yellow-300 mr-3">Promotions </span>
+                                <span
+                                    className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
+                            </div>
+                            {promotionsOpen && (
+                                <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaDollarSign className="text-gray-400 mr-3"/>
+                                        <a href="/jackpotz-mania" className="text-gray-400">Jackpotz Mania</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaPiggyBank className="text-gray-400 mr-3"/>
+                                        <a href="/welcome-package" className="text-gray-400">Welcome Package</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaPiggyBank className="text-gray-400 mr-3"/>
+                                        <a href="/piggy-bank" className="text-gray-400">PiggyBank</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaTrophy className="text-gray-400 mr-3"/>
+                                        <a href="/slot-wars" className="text-gray-400">Slot Wars</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaTrophy className="text-gray-400 mr-3"/>
+                                        <a href="/level-up-adventures" className="text-gray-400">Level Up Adventures</a>
+                                    </li>
+                                </ul>
+                            )}
                         </li>
-                        <li className="py-2 px-4 border-b border-gray-700">
-                            <a href="/promotions" className="text-yellow-500 hover:text-white transition duration-200">
-                                Promotions
-                            </a>
+                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaPiggyBank className="text-yellow-300 mr-3"/>
+                            <a href="/vip" className="text-yellow-300">Banking</a>
                         </li>
-                        <li className="py-2 px-4 border-b border-gray-700">
-                            <a href="/vip" className="text-yellow-500 hover:text-white transition duration-200">
-                                VIP
-                            </a>
+                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaStar className="text-yellow-300 mr-3"/>
+                            <a href="/vip" className="text-yellow-300">VIP</a>
                         </li>
-                        <li className="py-2 px-4">
-                            <a href="/more" className="text-yellow-500 hover:text-white transition duration-200">
-                                More
-                            </a>
+                        <li className="relative py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaQuestionCircle className="text-yellow-300 mr-3"/>
+                            <div className="flex justify-between items-center w-full cursor-pointer"
+                                 onClick={toggleSupport}>
+                                <span className="text-yellow-300 mr-3">Support</span>
+                                <span
+                                    className={`transition-transform duration-300 text-yellow-300 mr-3  ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
+                            </div>
+                            {supportOpen && (
+                                <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaQuestionCircle className="text-gray-400 mr-3"/>
+                                        <a href="/support-contact" className="text-gray-400">Contact Us</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaQuestionCircle className="text-gray-400 mr-3"/>
+                                        <a href="/support-faq" className="text-gray-400">FAQ</a>
+                                    </li>
+                                </ul>
+                            )}
                         </li>
+
                     </ul>
                 </nav>
             )}
-            {showLogin && (
-                <Login onClose={closeLogin} />
-            )}
-            {showSignup && (
-                <Signup onClose={closeSignup} />
-            )}
+
+            {
+                showLogin && (
+                    <Login onClose={closeLogin}/>
+                )
+            }
+            {
+                showSignup && (
+                    <Signup onClose={closeSignup}/>
+                )
+            }
         </header>
-    );
-};
+    )
+        ;
+    }
+;
 
 export default Header;

@@ -33,7 +33,7 @@ const JackpotSection = () => {
                         Jackpotz Mania
                     </h3>
                     <p className="text-lg text-gray-300 mt-4">
-                        Play the spins for a chance to win one of the BitStarz Jackpots!
+                        Play the spins for a chance to win one of the BitSpin Jackpots!
                     </p>
                 </motion.div>
 
