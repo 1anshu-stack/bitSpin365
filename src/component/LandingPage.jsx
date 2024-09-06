@@ -4,9 +4,18 @@ import img from '../assets/mainpagepic.png';
 import GameCarousel from './GameCarousel';
 import JackpotSection from "./JackpotSection.jsx";
 import FeedbackCard from './FeedbackCard';
+import Signup from './Signup';
 
 const LandingPage = () => {
     const [darkMode, setDarkMode] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
+    const openSignup = () => {
+            setShowSignup(true);
+        };
+
+        const closeSignup = () => {
+            setShowSignup(false);
+        };
 
     // Sample feedback data
     const feedbacks = [
@@ -82,7 +91,9 @@ const LandingPage = () => {
                                     className="flex-shrink-0 w-80"
                                     initial={{opacity: 0, x: 100}}
                                     animate={{opacity: 1, x: 0}}
-                                    transition={{duration: 0.5, delay: index * 0.1}}
+                                    exit={{ opacity: 0, x: -100}}
+                                    transition={{duration: 0.5, delay: index * 0.1, type: "spring",
+                                        stiffness: 300, damping: 20}}
                                     whileHover={{ scale: 1.05, y: -5 }}
                                  >
                                      <FeedbackCard {...feedback} />
@@ -101,6 +112,9 @@ const LandingPage = () => {
                         <p className="text-lg text-gray-300 mt-4">
                             Play the spins for a chance to win one of the BitSpin365 Jackpots!
                         </p>
+                        <button className="nav-button mt-4 py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openSignup}>
+                            Signup now
+                        </button>
                     </div>
                 </section>
                 {/* Features Section */}
@@ -128,6 +142,7 @@ const LandingPage = () => {
                     <a href="/terms" className="underline">Terms & Conditions</a>
                 </footer>
             </div>
+            {showSignup && <Signup closeSignup={closeSignup} />}
         </div>
     );
 };
