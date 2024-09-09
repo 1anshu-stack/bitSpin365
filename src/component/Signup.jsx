@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import casino from "../assets/casino.jpeg";
+import casino from "../assets/BigWin.jpg";
 
 const Signup = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -147,7 +147,7 @@ const Signup = ({ onClose }) => {
 
     return (
         <>
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
                 <div ref={modalRef} className="bg-white rounded-lg overflow-hidden w-11/12 sm:w-3/4 md:w-1/2 h-auto max-h-full relative flex flex-col md:flex-row">
                     <div className="flex-shrink-0 w-full md:w-1/2 relative h-40 md:h-auto">
                         <img src={casino} alt="Casino background" className="w-full h-full object-cover" />
