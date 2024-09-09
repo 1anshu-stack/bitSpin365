@@ -34,28 +34,7 @@ const LandingPage = () => {
                                 className="w-full object-cover"
                             />
                         </div>
-                        {/* Animated Text Box */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                            <motion.div
-                                initial={{scale: 0.5, opacity: 0}}
-                                animate={{scale: [1, 1.1, 1], opacity: 1}}
-                                transition={{
-                                    duration: 1,
-                                    ease: "easeInOut",
-                                    repeat: Infinity,
-                                    repeatType: "reverse",
-                                }}
-                                className="bg-gradient-to-r from-purple-800 via-red-600 to-yellow-400 p-8 rounded-lg border-4 border-yellow-500 shadow-2xl"
-                            >
-                                <h2 className="text-5xl font-extrabold bg-gradient-to-r from-yellow-400 via-red-500 to-purple-500 bg-clip-text text-transparent">
-                                    Play Big, Win Bigger
-                                </h2>
-                                <p className="text-xl max-w-2xl mt-4">
-                                    Experience the thrill of the game, win big, and cash out instantly.
-                                </p>
-                            </motion.div>
-                        </div>
-                    </div>
+                     </div>
                 </section>
 
                 {/* Game Carousel Section */}
@@ -109,15 +88,8 @@ const LandingPage = () => {
                             Let's Get Started
                         </h3>
                         <p className="text-lg text-gray-300 mt-4">
-                            Play the spins for a chance to win one of the BitStarz Jackpots!
+                            Play the spins for a chance to win one of the BitSpin365 Jackpots!
                         </p>
-                        {/*<div className="nav-buttons flex gap-4">*/}
-                        {/*    <button*/}
-                        {/*        className="nav-button py-2 px-4 bg-red-600 text-white rounded hover:bg-red-500 transition duration-300"*/}
-                        {/*        onClick={openSignup}>*/}
-                        {/*        Signup*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
                     </div>
                 </section>
                 {/* Features Section */}
