@@ -23,7 +23,6 @@ const LandingPage = () => {
         setAnimationPaused(true);
     };
 
-
     const handleClickOutside = (e) => {
         if (!e.target.closest('.feedback-card')) {
             setActiveCard(null);
@@ -49,11 +48,11 @@ const LandingPage = () => {
             <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
                 {/* Hero Section */}
                 <section className="flex flex-col items-center justify-center text-center py-10 space-y-6 relative">
-                    <div className="relative w-full h-full h-100 md:h-150 lg:h-170">
+                    <div className="relative w-full h-full">
                         <motion.img
                             src={img}
                             alt="image"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover max-w-[100vw]"
                         />
                         {/* Rectangular Box */}
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -93,7 +92,7 @@ const LandingPage = () => {
                                     <img
                                         src={BitSpin365_logo}
                                         alt="Gaming Image"
-                                        className="w-full h-full object-cover rounded-r-xl"
+                                        className="w-full h-full object-cover rounded-r-xl max-w-[50vw]"
                                     />
                                 </div>
                             </div>
@@ -128,7 +127,7 @@ const LandingPage = () => {
 
                 <section className="py-16 px-4" onClick={handleClickOutside}>
                     <h3 className="text-3xl font-bold mb-10">User Feedback</h3>
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative overflow-hidden">
                         {!animationPaused && (
                             <motion.div
                                 className="flex space-x-6 py-4 absolute top-0"
