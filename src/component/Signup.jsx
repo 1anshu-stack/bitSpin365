@@ -23,12 +23,13 @@ const Signup = ({ onClose }) => {
     const [errors, setErrors] = useState({});
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Show the success message modal
 
     const modalRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
+            if (modalRef.current && !modalRef.current.contains(event.target) && !RegistrationClose) {
                 setShowConfirmationDialog(true);
             }
         };
@@ -84,12 +85,17 @@ const Signup = ({ onClose }) => {
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const handleClose = () => setShowConfirmationDialog(true);
-
+    const Close = () => {
+        setShowSuccessMessage(true);
+    }
     const confirmClose = () => {
         setShowConfirmationDialog(false);
         onClose();
     };
-
+    const RegistrationClose = () => {
+        setShowConfirmationDialog(false);
+        onClose();
+    }
     const cancelClose = () => setShowConfirmationDialog(false);
 
     return (
@@ -320,7 +326,7 @@ const Signup = ({ onClose }) => {
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
                                     disabled
-                                    placeholder="Security Question"
+                                    placeholder="What is your favourite color?"
                                     className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none"
                                 />
                             </div>
@@ -342,7 +348,7 @@ const Signup = ({ onClose }) => {
                             {/* Save Changes Button */}
                             <button
                                 type="button"
-                                onClick={() => alert('Changes saved!')}
+                                onClick={Close}
                                 className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
                             >
                                 Save Changes
@@ -376,6 +382,22 @@ const Signup = ({ onClose }) => {
                     </div>
                 </div>
             )}
+            {/* Success Message Modal */}
+            {showSuccessMessage && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60">
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
+                        <h2 className="text-2xl font-bold mb-4">Registration Successful!</h2>
+                        <p className="mb-4">Welcome to Bitspin365. An email has been sent for verification.</p>
+                        <button
+                            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+                            onClick={RegistrationClose}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

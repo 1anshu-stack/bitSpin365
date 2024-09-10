@@ -23,6 +23,7 @@ const LandingPage = () => {
         setAnimationPaused(true);
     };
 
+
     const handleClickOutside = (e) => {
         if (!e.target.closest('.feedback-card')) {
             setActiveCard(null);
