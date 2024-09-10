@@ -1,28 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import casino from "../assets/BigWin.jpg";
+import Bonus from '../assets/Bonus.jpg'; // Example background image path
 
 const Signup = ({ onClose }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
         is18OrAbove: false,
-        currency: ''
+        agreeToTerms: false,
+        firstName: '',
+        lastName: '',
+        dob: '',
+        address: '',
+        city: '',
+        country: '',
+        postcode: '',
+        phone: '',
+        securityQuestion: '',
+        answer: '',
     });
+    const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-    const [showExitConfirmation, setShowExitConfirmation] = useState(false);
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const [success, setSuccess] = useState(false); // Success state
-    const [errorMessage, setErrorMessage] = useState(''); // Error message state
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
+
     const modalRef = useRef(null);
-    const formRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target) && !formRef.current.contains(event.target)) {
-                setShowExitConfirmation(true);
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                setShowConfirmationDialog(true);
             }
         };
 
@@ -33,196 +40,335 @@ const Signup = ({ onClose }) => {
         };
     }, []);
 
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    const validatePassword = (password) => password.length >= 6;
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: type === 'checkbox' ? checked : value,
         }));
     };
 
-    const validateEmail = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    const validatePassword = (password) => {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return regex.test(password);
-    };
-
-    const validateCheckbox = () => {
-        if (!formData.is18OrAbove) {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                is18OrAbove: 'You must be 18 years or older to sign up.'
-            }));
-            return false;
-        } else {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                is18OrAbove: '' // Clear error if checkbox is checked
-            }));
-            return true;
-        }
-    };
-
-    const handleBlur = (e) => {
-        const { name, value } = e.target;
-        let error = {};
-
-        if (name === 'email') {
-            if (!validateEmail(value)) {
-                error.email = 'Invalid email format';
-            } else {
-                error.email = ''; // Clear error if email is valid
-            }
-        } else if (name === 'password') {
-            if (!validatePassword(value)) {
-                error.password = 'Password must be at least 8 characters long, contain at least one uppercase letter, one digit, and one special character.';
-            } else {
-                error.password = ''; // Clear error if password is valid
-            }
-        }else if (name === 'is18OrAbove') {
-            if (!checked) {
-                error.is18OrAbove = 'You must be 18 years or older to sign up.';
-            } else {
-                error.is18OrAbove = ''; // Clear error if checkbox is checked
-            }
-        }
-
-        setErrors(prevErrors => ({
-            ...prevErrors,
-            ...error
-        }));
-    };
-
-    // Mutation hook for signup
-    const mutation = useMutation({
-        mutationFn: async (data) => {
-            const response = await axios.post('/api/signup', data);
-            return response.data;
-        },
-        onSuccess: () => {
-            setSuccess(true);
-            setErrorMessage('');
-        },
-        onError: (error) => {
-            setErrorMessage(error.response?.data?.message || 'An error occurred during signup. Please try again later.');
-            setSuccess(false);
-        }
-    });
-
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent page reload
-        const errors = {};
+        const newErrors = {};
 
         if (!validateEmail(formData.email)) {
-            errors.email = 'Invalid email format';
+            newErrors.email = 'Please enter a valid email address';
         }
 
         if (!validatePassword(formData.password)) {
-            errors.password = 'Password must be at least 8 characters long, contain at least one uppercase letter, one digit, and one special character.';
+            newErrors.password = 'Password must be at least 6 characters long';
         }
 
-        if (!validateCheckbox()) {
-            errors.is18OrAbove = 'You must be 18 years or older to sign up.';
+        if (!formData.is18OrAbove) {
+            newErrors.is18OrAbove = 'You must be 18 years or older';
         }
 
-        if (Object.keys(errors).length > 0) {
-            setErrors(errors);
-            return;
+        if (!formData.agreeToTerms) {
+            newErrors.agreeToTerms = 'You must agree to the terms & conditions';
         }
 
-        mutation.mutate(formData);
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            console.log('Signup form submitted:', formData);
+            setIsRegistered(true); // Show registration form
+        }
     };
 
-    const handleCancelClose = () => {
-        setShowExitConfirmation(false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+    const handleClose = () => setShowConfirmationDialog(true);
+
+    const confirmClose = () => {
+        setShowConfirmationDialog(false);
+        onClose();
     };
+
+    const cancelClose = () => setShowConfirmationDialog(false);
 
     return (
-        <>
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-                <div ref={modalRef} className="bg-white rounded-lg overflow-hidden w-11/12 sm:w-3/4 md:w-1/2 h-auto max-h-full relative flex flex-col md:flex-row">
-                    <div className="flex-shrink-0 w-full md:w-1/2 relative h-40 md:h-auto">
-                        <img src={casino} alt="Casino background" className="w-full h-full object-cover" />
-                    </div>
-                    <form ref={formRef} className="w-full p-6 md:p-8 flex flex-col overflow-y-auto" onSubmit={handleSubmit}>
-                        <button type="button" className="absolute top-4 right-4 text-2xl font-bold z-20" onClick={() => setShowExitConfirmation(true)}>
-                            X
-                        </button>
-                        <h2 className="text-xl md:text-2xl font-bold mb-5">Sign Up</h2>
-                        <div className="relative mb-4">
-                            <FaEnvelope className="absolute top-3 left-3 text-gray-400" />
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                placeholder="Enter email"
-                                className="pl-10 p-2 border border-gray-400 rounded w-full"
-                            />
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                        </div>
-                        <div className="relative mb-4">
-                            <FaLock className="absolute top-3 left-3 text-gray-400" />
-                            <input
-                                type={passwordVisible ? 'text' : 'password'}
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                placeholder="Enter password"
-                                className="pl-10 p-2 border border-gray-400 rounded w-full"
-                            />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div
+                ref={modalRef}
+                className="bg-white rounded-lg w-full max-w-4xl h-100% md:h-4/5 overflow-auto shadow-lg flex flex-col md:flex-row"
+            >
+                {/* Image Section */}
+                <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden bg-gray-200">
+                    <img src={Bonus} alt="Signup Background" className="w-full h-full object-cover"/>
+                </div>
+
+
+                {/* Form Section */}
+                <div
+                    className="w-full md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-yellow-50 to-yellow-100">
+                    <button
+                        type="button"
+                        onClick={handleClose}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-black text-3xl font-bold"
+                    >
+                        &times;
+                    </button>
+
+                    {!isRegistered ? (
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-6">Welcome to
+                                Bitspin365!</h2>
+
+                            {/* Email Input */}
+                            <div className="relative mb-4">
+                                <FaEnvelope className="absolute top-4 left-3 text-gray-500"/>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Enter your email"
+                                    className={`w-full p-3 pl-10 border ${
+                                        errors.email ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                            </div>
+
+                            {/* Password Input */}
+                            <div className="relative mb-4">
+                                <FaLock className="absolute top-4 left-3 text-gray-500"/>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Enter your password"
+                                    className={`w-full p-3 pl-10 border ${
+                                        errors.password ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute top-3 right-3 text-gray-500"
+                                >
+                                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                                </button>
+                                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                            </div>
+
+                            {/* T&C and Age Checkboxes */}
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    name="agreeToTerms"
+                                    checked={formData.agreeToTerms}
+                                    onChange={handleChange}
+                                    className="mr-2 w-6 h-6"
+                                />
+                                <label htmlFor="agreeToTerms" className="text-gray-600 font-bold">
+                                    I agree to the terms & conditions of Bitspin365
+                                </label>
+                            </div>
+                            {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms}</p>}
+
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    name="is18OrAbove"
+                                    checked={formData.is18OrAbove}
+                                    onChange={handleChange}
+                                    className="mr-2 w-6 h-6"
+                                />
+                                <label htmlFor="is18OrAbove" className="text-gray-600 font-bold">
+                                    I am 18 years or older
+                                </label>
+                            </div>
+                            {errors.is18OrAbove && <p className="text-red-500 text-sm mt-1">{errors.is18OrAbove}</p>}
+
+                            <button
+                                type="submit"
+                                className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
+                            >
+                                Sign Up
+                            </button>
+                        </form>
+                    ) : (
+                        <form className="space-y-2">
+                            <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-4">Almost There!</h2>
+                            <p className="text-center text-lg text-gray-600 mb-6">
+                                Complete your profile to enjoy all the benefits.
+                            </p>
+
+                            {/* First Name Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    placeholder="First Name"
+                                    className={`w-full p-3 border ${
+                                        errors.firstName ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Last Name Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    placeholder="Last Name"
+                                    className={`w-full p-3 border ${
+                                        errors.lastName ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Date of Birth Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="date"
+                                    name="dob"
+                                    value={formData.dob}
+                                    onChange={handleChange}
+                                    className={`w-full p-3 border ${
+                                        errors.dob ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Address Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    placeholder="Address"
+                                    className={`w-full p-3 border ${
+                                        errors.address ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* City Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                    placeholder="City"
+                                    className={`w-full p-3 border ${
+                                        errors.city ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Country Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                    placeholder="Country"
+                                    className={`w-full p-3 border ${
+                                        errors.country ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Postcode Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="postcode"
+                                    value={formData.postcode}
+                                    onChange={handleChange}
+                                    placeholder="Postcode"
+                                    className={`w-full p-3 border ${
+                                        errors.postcode ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Phone Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="Phone Number"
+                                    className={`w-full p-3 border ${
+                                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Security Question Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="securityQuestion"
+                                    value={formData.securityQuestion}
+                                    disabled
+                                    placeholder="Security Question"
+                                    className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none"
+                                />
+                            </div>
+
+                            {/* Answer Input */}
+                            <div className="relative mb-4">
+                                <input
+                                    type="text"
+                                    name="answer"
+                                    value={formData.answer}
+                                    onChange={handleChange}
+                                    placeholder="Answer"
+                                    className={`w-full p-3 border ${
+                                        errors.answer ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                />
+                            </div>
+
+                            {/* Save Changes Button */}
                             <button
                                 type="button"
-                                className="absolute top-3 right-3"
-                                onClick={() => setPasswordVisible(!passwordVisible)}
+                                onClick={() => alert('Changes saved!')}
+                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
                             >
-                                {passwordVisible ? <FaEyeSlash className="text-gray-400" /> : <FaEye className="text-gray-400" />}
+                                Save Changes
                             </button>
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                        </div>
-                        <label className="flex items-center mb-4">
-                            <input
-                                type="checkbox"
-                                name="is18OrAbove"
-                                checked={formData.is18OrAbove}
-                                onChange={handleChange}
-                                onBlur={validateCheckbox}
-                                className="mr-2"
-                            />
-                            I am 18 years or above
-                        </label>
-                        {errors.is18OrAbove && <p className="text-red-500 text-sm mt-1">{errors.is18OrAbove}</p>}
-                        <button type="submit" className="bg-orange-500 text-white p-2 rounded mb-4" disabled={mutation.isLoading}>
-                            {mutation.isLoading ? 'Signing Up...' : 'Sign Up'}
-                        </button>
-                        <a href="/forgot-password" className="text-orange-500 text-center mb-4">
-                            Forgot password?
-                        </a>
-                    </form>
+                        </form>
+                    )}
                 </div>
             </div>
 
-            {showExitConfirmation && (
-                <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-20">
-                    <div className="bg-white rounded-lg p-5 w-11/12 sm:w-3/4 md:w-1/2 max-w-md relative">
-                        <p className="text-lg mb-2">Are you sure you want to exit?</p>
-                        <p className="mb-4">Don’t miss out on the high stakes and big wins at our casino!</p>
-                        <div className="flex justify-end space-x-4">
+            {showConfirmationDialog && (
+                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
+                        <h2 className="text-xl font-bold text-gray-800 mb-4">Wait! Don't leave yet!</h2>
+                        <p className="text-gray-600 mb-4">
+                            Stay with us and complete your signup for exciting rewards on Bitspin365!
+                        </p>
+                        <div className="flex justify-between">
                             <button
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
-                                onClick={handleCancelClose}
+                                onClick={cancelClose}
+                                className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors"
                             >
                                 Back to Signup
                             </button>
                             <button
-                                className="bg-red-500 text-white px-4 py-2 rounded"
-                                onClick={onClose}
+                                onClick={confirmClose}
+                                className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
                             >
                                 Exit
                             </button>
@@ -230,36 +376,7 @@ const Signup = ({ onClose }) => {
                     </div>
                 </div>
             )}
-
-            {success && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-semibold text-green-600 mb-4">Signup Successful!</h2>
-                        <button
-                            onClick={onClose}
-                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {errorMessage && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-semibold text-red-600 mb-4">Signup Error</h2>
-                        <p className="mb-4">{errorMessage}</p>
-                        <button
-                            onClick={() => setErrorMessage('')}
-                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-        </>
+        </div>
     );
 };
 
