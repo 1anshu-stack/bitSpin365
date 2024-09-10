@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+
 
 const Signup = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -23,12 +26,16 @@ const Signup = ({ onClose }) => {
     const [errors, setErrors] = useState({});
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
+    //add const for success(false)/isRegistered and error message('')
+    const [errorMessage, setErrorMessage] = useState('');
 
     const modalRef = useRef(null);
+    //add formRef(null)
+    const formRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
+            if (modalRef.current && !modalRef.current.contains(event.target) && !formRef.current.contains(event.target)) { //changes needed for formRef
                 setShowConfirmationDialog(true);
             }
         };
@@ -42,7 +49,12 @@ const Signup = ({ onClose }) => {
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const validatePassword = (password) => password.length >= 6;
+    const validatePassword = (password) => password.length >= 8;
+
+    //validateCheckBox for is18OrAbove;
+    const validateCheckBox = () => formData.is18OrAbove;
+    //validation for agreeToTerms;
+    const validateAgreeToTerms = () => formData.agreeToTerms;
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -52,33 +64,89 @@ const Signup = ({ onClose }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    //create handleBlur for instant validation
+    const handleBlur = (e) => {
+        const { name, value, checked } = e.target;
+        let error = {};
+
+        if (name === 'email') {
+            if (!validateEmail(value)) {
+                error.email = 'Invalid email format';
+            } else {
+                error.email = ''; // Clear error if email is valid
+            }
+        } else if (name === 'password') {
+            if (!validatePassword(value)) {
+                error.password = 'Password must be at least 8 characters long, contain at least one uppercase letter, one digit, and one special character.';
+            } else {
+                error.password = ''; // Clear error if password is valid
+            }
+        }else if (name === 'is18OrAbove') {
+            if (!validateCheckbox(checked)) {
+                error.is18OrAbove = 'You must be 18 years or older to sign up.';
+            }
+            else {
+                error.is18OrAbove = ''; // Clear error if checkbox is checked
+            }
+        }else if (name === 'agreeToTerms') {
+            if (!validateAgreeToTerms(checked)) {
+                error.agreeToTerms = 'You must agree to terms.';
+            }else {
+                error.agreeToTerms = '';
+            }
+        }
+
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            ...error
+        }));
+    };
+    //mutation hook for signup using mutationFn explicitly
+    const mutation = useMutation({
+        mutationFn: async (data) => {
+            const response = await axios.post('http://localhost:8080/api/registration/create', data);
+            return response.data;
+        },
+        onSuccess: () => {
+            setIsRegistered(true);
+            setErrorMessage('');
+        },
+        onError: (error) => {
+            setErrorMessage(error.response?.data?.message || 'An error occurred during signup. Please try again later.');
+            setIsRegistered(false);
+        }
+    });
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = {};
+        //const newErrors = {};
+        const errors = {};
 
         if (!validateEmail(formData.email)) {
-            newErrors.email = 'Please enter a valid email address';
+            errors.email = 'Please enter a valid email address';
         }
 
         if (!validatePassword(formData.password)) {
-            newErrors.password = 'Password must be at least 6 characters long';
+            errors.password = 'Password must be at least 6 characters long';
         }
 
-        if (!formData.is18OrAbove) {
-            newErrors.is18OrAbove = 'You must be 18 years or older';
+        if (!validateCheckBox()) {
+            errors.is18OrAbove = 'You must be 18 years or older';
         }
 
-        if (!formData.agreeToTerms) {
-            newErrors.agreeToTerms = 'You must agree to the terms & conditions';
+        if (!validateAgreeToTerms()) {
+            errors.agreeToTerms = 'You must agree to the terms & conditions';
         }
 
-        setErrors(newErrors);
+        setErrors(errors);
 
-        if (Object.keys(newErrors).length === 0) {
+        if (Object.keys(errors).length === 0) {
             console.log('Signup form submitted:', formData);
             setIsRegistered(true); // Show registration form
         }
+
+        mutation.mutate(formData);
     };
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -128,9 +196,10 @@ const Signup = ({ onClose }) => {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder="Enter your email"
                                     className={`w-full p-3 pl-10 border ${
-                                        errors.email ? 'border-red-500' : 'border-gray-300'
+                                        errors.email ? 'border-red-500' : 'border-gray-300'//error may give issues.
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -144,9 +213,10 @@ const Signup = ({ onClose }) => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder="Enter your password"
                                     className={`w-full p-3 pl-10 border ${
-                                        errors.password ? 'border-red-500' : 'border-gray-300'
+                                        errors.password ? 'border-red-500' : 'border-gray-300'//error may give issues.
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                                 <button
@@ -166,6 +236,7 @@ const Signup = ({ onClose }) => {
                                     name="agreeToTerms"
                                     checked={formData.agreeToTerms}
                                     onChange={handleChange}
+                                    onBlur={validateAgreeToTerms}
                                     className="mr-2 w-6 h-6"
                                 />
                                 <label htmlFor="agreeToTerms" className="text-gray-600 font-bold">
@@ -180,6 +251,7 @@ const Signup = ({ onClose }) => {
                                     name="is18OrAbove"
                                     checked={formData.is18OrAbove}
                                     onChange={handleChange}
+                                    onBlur={validateCheckBox}
                                     className="mr-2 w-6 h-6"
                                 />
                                 <label htmlFor="is18OrAbove" className="text-gray-600 font-bold">
@@ -187,12 +259,14 @@ const Signup = ({ onClose }) => {
                                 </label>
                             </div>
                             {errors.is18OrAbove && <p className="text-red-500 text-sm mt-1">{errors.is18OrAbove}</p>}
+                            {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms}</p>}
 
                             <button
                                 type="submit"
                                 className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
+                                disabled={mutation.isLoading}
                             >
-                                Sign Up
+                                {mutation.isLoading ? 'signing Up...' : 'Sign Up'}
                             </button>
                         </form>
                     ) : (
@@ -319,7 +393,8 @@ const Signup = ({ onClose }) => {
                                     type="text"
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
-                                    disabled
+//                                     disabled
+                                    onChange={handleChange}
                                     placeholder="Security Question"
                                     className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none"
                                 />
@@ -373,6 +448,20 @@ const Signup = ({ onClose }) => {
                                 Exit
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+            {errorMessage && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-semibold text-red-600 mb-4">Signup Error</h2>
+                        <p className="mb-4">{errorMessage}</p>
+                        <button
+                            onClick={() => setErrorMessage('')}
+                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             )}
