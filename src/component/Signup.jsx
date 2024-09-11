@@ -3,6 +3,8 @@ import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
+import AddDetails from './AddDetails';
+import { useNavigate } from 'react-router-dom';
 
 
 const Signup = ({ onClose }) => {
@@ -11,16 +13,6 @@ const Signup = ({ onClose }) => {
         password: '',
         is18OrAbove: false,
         agreeToTerms: false,
-        firstName: '',
-        lastName: '',
-        dob: '',
-        address: '',
-        city: '',
-        country: '',
-        postcode: '',
-        phone: '',
-        securityQuestion: '',
-        answer: '',
     });
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
@@ -28,6 +20,8 @@ const Signup = ({ onClose }) => {
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
     //add const for success(false)/isRegistered and error message('')
     const [errorMessage, setErrorMessage] = useState('');
+    const [showAddDetails, setShowAddDetails] = useState(false);
+    const navigate = useNavigate();
 
     const modalRef = useRef(null);
     //add formRef(null)
@@ -82,14 +76,14 @@ const Signup = ({ onClose }) => {
                 error.password = ''; // Clear error if password is valid
             }
         }else if (name === 'is18OrAbove') {
-            if (!validateCheckbox(checked)) {
+            if (!validateCheckbox()) {
                 error.is18OrAbove = 'You must be 18 years or older to sign up.';
             }
             else {
                 error.is18OrAbove = ''; // Clear error if checkbox is checked
             }
         }else if (name === 'agreeToTerms') {
-            if (!validateAgreeToTerms(checked)) {
+            if (!validateAgreeToTerms()) {
                 error.agreeToTerms = 'You must agree to terms.';
             }else {
                 error.agreeToTerms = '';
@@ -107,9 +101,11 @@ const Signup = ({ onClose }) => {
             const response = await axios.post('http://localhost:8080/api/registration/create', data);
             return response.data;
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
+            sessionStorage.setItem('token', data.token);
             setIsRegistered(true);
             setErrorMessage('');
+            navigate('/add-details');
         },
         onError: (error) => {
             setErrorMessage(error.response?.data?.message || 'An error occurred during signup. Please try again later.');
@@ -143,10 +139,9 @@ const Signup = ({ onClose }) => {
 
         if (Object.keys(errors).length === 0) {
             console.log('Signup form submitted:', formData);
+            mutation.mutate(formData);
             setIsRegistered(true); // Show registration form
         }
-
-        mutation.mutate(formData);
     };
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -270,159 +265,7 @@ const Signup = ({ onClose }) => {
                             </button>
                         </form>
                     ) : (
-                        <form className="space-y-2">
-                            <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-4">Almost There!</h2>
-                            <p className="text-center text-lg text-gray-600 mb-6">
-                                Complete your profile to enjoy all the benefits.
-                            </p>
-
-                            {/* First Name Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    placeholder="First Name"
-                                    className={`w-full p-3 border ${
-                                        errors.firstName ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Last Name Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    placeholder="Last Name"
-                                    className={`w-full p-3 border ${
-                                        errors.lastName ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Date of Birth Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="date"
-                                    name="dob"
-                                    value={formData.dob}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 border ${
-                                        errors.dob ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Address Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    placeholder="Address"
-                                    className={`w-full p-3 border ${
-                                        errors.address ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* City Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={formData.city}
-                                    onChange={handleChange}
-                                    placeholder="City"
-                                    className={`w-full p-3 border ${
-                                        errors.city ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Country Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="country"
-                                    value={formData.country}
-                                    onChange={handleChange}
-                                    placeholder="Country"
-                                    className={`w-full p-3 border ${
-                                        errors.country ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Postcode Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="postcode"
-                                    value={formData.postcode}
-                                    onChange={handleChange}
-                                    placeholder="Postcode"
-                                    className={`w-full p-3 border ${
-                                        errors.postcode ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Phone Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    placeholder="Phone Number"
-                                    className={`w-full p-3 border ${
-                                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Security Question Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="securityQuestion"
-                                    value={formData.securityQuestion}
-//                                     disabled
-                                    onChange={handleChange}
-                                    placeholder="Security Question"
-                                    className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none"
-                                />
-                            </div>
-
-                            {/* Answer Input */}
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
-                                    name="answer"
-                                    value={formData.answer}
-                                    onChange={handleChange}
-                                    placeholder="Answer"
-                                    className={`w-full p-3 border ${
-                                        errors.answer ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                            </div>
-
-                            {/* Save Changes Button */}
-                            <button
-                                type="button"
-                                onClick={() => alert('Changes saved!')}
-                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
-                            >
-                                Save Changes
-                            </button>
-                        </form>
+                        <AddDetails />
                     )}
                 </div>
             </div>
