@@ -29,7 +29,7 @@ const Signup = ({ onClose }) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target) && !formRef.current.contains(event.target)) { //changes needed for formRef
+            if (modalRef.current && !modalRef.current.contains(event.target) && (formRef.current === null || !formRef.current.contains(event.target))) { //changes needed for formRef
                 setShowConfirmationDialog(true);
             }
         };
@@ -102,7 +102,7 @@ const Signup = ({ onClose }) => {
             return response.data;
         },
         onSuccess: (data) => {
-            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('token', data);
             setIsRegistered(true);
             setErrorMessage('');
             navigate('/add-details');
@@ -179,7 +179,7 @@ const Signup = ({ onClose }) => {
                     </button>
 
                     {!isRegistered ? (
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form ref={ formRef } onSubmit={handleSubmit} className="space-y-6">
                             <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-6">Welcome to
                                 Bitspin365!</h2>
 
