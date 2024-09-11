@@ -1,12 +1,11 @@
 import React from 'react';
 // const image = require('../assets/card1.jpg');
 
-const GameCard = ({ title, image, description }) => {
+const GameCard = ({ image }) => {
     return (
-        <div className="p-4 rounded-lg shadow-lg w-64 my-8">
-            <img src={image} alt={title} className="w-30 h-48 object-cover rounded-t-lg" />
-            <h2 className="text-xl font-semibold text-yellow-300 mt-2">{title}</h2>
-            <p className="text-gray-400 mt-1">{description}</p>
+        <div className="p-4 rounded-lg shadow-lg w-full md:w-64 my-4 md:my-8">
+            {/*we can add play logo when hover over on cards. */}
+            <img src={image} alt="" className="w-full h-full object-cover rounded-t-lg" />
         </div>
     );
 };
