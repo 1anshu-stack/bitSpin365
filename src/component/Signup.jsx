@@ -102,10 +102,14 @@ const Signup = ({ onClose }) => {
             return response.data;
         },
         onSuccess: (data) => {
-            sessionStorage.setItem('token', data);
-            setIsRegistered(true);
-            setErrorMessage('');
+            console.log('response data: ', data);
+            sessionStorage.setItem('token', data.token);
+            console.log('token: ', data.token);
+//             setIsRegistered(true);
+//             setErrorMessage('');
+            console.log('navigating to add details page');
             navigate('/add-details');
+            console.log('navigating to add details page');
         },
         onError: (error) => {
             setErrorMessage(error.response?.data?.message || 'An error occurred during signup. Please try again later.');
@@ -138,8 +142,12 @@ const Signup = ({ onClose }) => {
         setErrors(errors);
 
         if (Object.keys(errors).length === 0) {
-            console.log('Signup form submitted:', formData);
-            mutation.mutate(formData);
+            const formDataWithoutConsent={
+                email: formData.email,
+                password: formData.password,
+            };
+            console.log('Signup form submitted:', formDataWithoutConsent);
+            mutation.mutate(formDataWithoutConsent);
             setIsRegistered(true); // Show registration form
         }
     };

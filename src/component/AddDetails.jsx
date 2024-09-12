@@ -3,11 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
 
-const ADD_DETAILS_MUTATION = async (details, token) => {
+const ADD_DETAILS_MUTATION = async (details, { context }) => {
   const response = await axios.post('http://localhost:8080/api/registration/add-details', details, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: context.headers,
   });
   return response.data;
 };
@@ -27,20 +25,11 @@ const AddDetails = () => {
     answer: '',
   });
 
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    dob: '',
-    address: '',
-    city: '',
-    country: '',
-    postcode: '',
-    phone: '',
-    securityQuestion: '',
-    answer: '',
-  });
+  const [errors, setErrors] = useState({});
 
-  const { mutate, isLoading, isError } = useMutation(ADD_DETAILS_MUTATION);
+  const { mutate, isLoading, isError } = useMutation({
+      mutationFn: ADD_DETAILS_MUTATION,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,12 +79,18 @@ const AddDetails = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      mutate(details, token, {
+      mutate(details, {
         onSuccess: () => {
           alert('Details added successfully!');
         },
         onError: (error) => {
+            console.log('error is here')
           console.error(error);
+        },
+        context: {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         },
       });
     }
