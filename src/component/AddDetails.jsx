@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
+import { useNavigate } from 'react-router-dom';
 
-const ADD_DETAILS_MUTATION = async (details, { context }) => {
+const ADD_DETAILS_MUTATION = async (args) => {
+    const { details, context } = args;
+    console.log('Details:', details);
+    console.log('Context:', context);
   const response = await axios.post('http://localhost:8080/api/registration/add-details', details, {
     headers: context.headers,
   });
@@ -13,15 +17,15 @@ const ADD_DETAILS_MUTATION = async (details, { context }) => {
 const AddDetails = () => {
   const token = sessionStorage.getItem('token');
   const [details, setDetails] = useState({
-    firstName: '',
-    lastName: '',
-    dob: '',
+    fname: '',
+    lname: '',
+    birthDate: '',
     address: '',
     city: '',
     country: '',
     postcode: '',
     phone: '',
-    securityQuestion: '',
+    question: '',
     answer: '',
   });
 
@@ -36,16 +40,16 @@ const AddDetails = () => {
 
     const errors = {};
 
-    if (!details.firstName) {
-      errors.firstName = 'Please enter your first name';
+    if (!details.fname) {
+      errors.fname = 'Please enter your first name';
     }
 
-    if (!details.lastName) {
-      errors.lastName = 'Please enter your last name';
+    if (!details.lname) {
+      errors.lname = 'Please enter your last name';
     }
 
-    if (!details.dob) {
-      errors.dob = 'Please enter your date of birth';
+    if (!details.birthDate) {
+      errors.birthDate = 'Please enter your date of birth';
     }
 
     if (!details.address) {
@@ -68,8 +72,8 @@ const AddDetails = () => {
       errors.phone = 'Please enter your phone number';
     }
 
-    if (!details.securityQuestion) {
-      errors.securityQuestion = 'Please select a security question';
+    if (!details.question) {
+      errors.question = 'Please select a security question';
     }
 
     if (!details.answer) {
@@ -78,21 +82,21 @@ const AddDetails = () => {
 
     setErrors(errors);
 
-    if (Object.keys(errors).length === 0) {
-      mutate(details, {
-        onSuccess: () => {
-          alert('Details added successfully!');
-        },
-        onError: (error) => {
-            console.log('error is here')
-          console.error(error);
-        },
-        context: {
-            headers: {
-                Authorization: `Bearer ${token}`,
+    if (Object.keys(errors).length === 0 && token) {
+        console.log('Details:', details);
+        console.log('Token:', token);
+        mutate({ details, context: { headers: { Authorization: `Bearer ${token}`}}}, {
+            onSuccess: () => {
+                navigate('/login');
+                alert('Details added successfully!');
             },
-        },
-      });
+            onError: (error) => {
+                console.log('error is here')
+                console.error(error);
+            },
+        });
+    }else {
+        console.log('token id not defined');
     }
   };
 
@@ -112,36 +116,36 @@ const AddDetails = () => {
                 <div className="relative mb-4">
                   <input
                     type="text"
-                    name="firstName"
-                    value={details.firstName}
-                    onChange={(e) => setDetails({ ...details, firstName: e.target.value })}
+                    name="fname"
+                    value={details.fname}
+                    onChange={(e) => setDetails({ ...details, fname: e.target.value })}
                     placeholder="First Name"
                     className={`w-full p-3 border ${
-                      errors.firstName ? 'border-red-500' : 'border-gray-300'
+                      errors.fname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
                 <div className="relative mb-4">
                   <input
                     type="text"
-                    name="lastName"
-                    value={details.lastName}
-                    onChange={(e) => setDetails({ ...details, lastName: e.target.value })}
+                    name="lname"
+                    value={details.lname}
+                    onChange={(e) => setDetails({ ...details, lname: e.target.value })}
                     placeholder="Last Name"
                     className={`w-full p-3 border ${
-                      errors.lastName ? 'border-red-500' : 'border-gray-300'
+                      errors.lname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
                 <div className="relative mb-4">
                   <input
                     type="date"
-                    name="dob"
-                    value={details.dob}
-                    onChange={(e) => setDetails({ ...details, dob: e.target.value })}
+                    name="birthDate"
+                    value={details.birthDate}
+                    onChange={(e) => setDetails({ ...details, birthDate: e.target.value })}
                     placeholder="Date of Birth"
                     className={`w-full p-3 border ${
-                      errors.dob ? 'border-red-500' : 'border-gray-300'
+                      errors.birthDate ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -207,13 +211,13 @@ const AddDetails = () => {
                 </div>
                 <div className="relative mb-4">
                     <select
-                      name="securityQuestion"
-                      value={details.securityQuestion}
+                      name="question"
+                      value={details.question}
                       onChange={(e) =>
-                        setDetails({ ...details, securityQuestion: e.target.value })
+                        setDetails({ ...details, question: e.target.value })
                       }
                       className={`w-full p-3 border ${
-                        errors.securityQuestion ? 'border-red-500' : 'border-gray-300'
+                        errors.question ? 'border-red-500' : 'border-gray-300'
                       } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                     >
                       <option value="">Select Security Question</option>
