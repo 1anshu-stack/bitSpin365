@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import BigWin from '../assets/BigWin.jpg'; // Example background image path
+import BigWin from './assets/BigWin.jpg'; // Example background image path
 import { FaGoogle, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa'; // For icons
-
+import'./global.css';
 const Login = ({ onClose }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    is18OrAbove: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isReset, setIsReset] = useState(false);
@@ -87,7 +86,7 @@ const Login = ({ onClose }) => {
               {!isReset ? (
                   <>
                     {/* Email Input */}
-                    <div className="relative mb-4">
+                    <div className="relative mb-4 ">
                       <FaEnvelope className="absolute top-4 left-3 text-gray-500" />
                       <input
                           type="email"
@@ -95,8 +94,8 @@ const Login = ({ onClose }) => {
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="Enter your email"
-                          className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
-                      />
+                          className="input-style"
+                          />
                     </div>
 
                     {/* Password Input */}
@@ -108,8 +107,8 @@ const Login = ({ onClose }) => {
                           value={formData.password}
                           onChange={handleChange}
                           placeholder="Enter your password"
-                          className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
-                      />
+                          className="input-style"
+                          />
                       <button
                           type="button"
                           onClick={togglePasswordVisibility}

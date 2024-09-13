@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import Bonus from '../assets/Bonus.jpg'; // Example background image path
+import Bonus from './assets/Bonus.jpg'; // Example background image path
 
 const Signup = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -43,7 +43,7 @@ const Signup = ({ onClose }) => {
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const validatePassword = (password) => password.length >= 6;
+    const validatePassword = (password) => password.length >= 8;
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;

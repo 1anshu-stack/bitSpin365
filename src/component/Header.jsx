@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaTrophy, FaQuestionCircle, FaStar } from 'react-icons/fa';
-import Login from './Login';
-import Signup from './Signup';
+import Login from '../Login.jsx';
+import Signup from '../Signup.jsx';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -77,79 +77,65 @@ const Header = () => {
 
             {menuOpen && (
                 <nav
-                    className="dropdown-menu fixed top-0 left-0 w-[30%] h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col">
+                    className="dropdown-menu fixed top-0 left-0 w-[100%] sm:w-[50%] md:w-[30%] h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col transition-all duration-300">
                     <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700">
                         <h1 className="text-2xl font-bold text-yellow-300">BitSpin365</h1>
                         <button onClick={toggleMenu} className="text-white text-3xl">&times;</button>
                     </div>
                     <ul className="flex flex-col mt-4 px-4 space-y-2">
                         <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaHome className="text-yellow-300 mr-3"/>
+                            <FaHome className="text-yellow-300 mr-3" />
                             <a href="/" className="text-yellow-300">Home</a>
                         </li>
                         <li className="relative py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaGift className="text-yellow-300 mr-3"/>
-                            <div className="flex justify-between items-center w-full cursor-pointer"
-                                 onClick={togglePromotions}>
-                                <span className="text-yellow-300 mr-3">Promotions </span>
+                            <FaGift className="text-yellow-300 mr-3" />
+                            <div className="flex justify-between items-center w-full cursor-pointer" onClick={togglePromotions}>
+                                <span className="text-yellow-300 mr-3">Promotions</span>
                                 <span
-                                    className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
+                                    className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>
+                        ▼
+                    </span>
                             </div>
                             {promotionsOpen && (
                                 <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaDollarSign className="text-gray-400 mr-3"/>
+                                        <FaDollarSign className="text-gray-400 mr-3" />
                                         <a href="/jackpotz-mania" className="text-gray-400">Jackpotz Mania</a>
                                     </li>
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaPiggyBank className="text-gray-400 mr-3"/>
+                                        <FaPiggyBank className="text-gray-400 mr-3" />
                                         <a href="/welcome-package" className="text-gray-400">Welcome Package</a>
-                                    </li>
-                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaPiggyBank className="text-gray-400 mr-3"/>
-                                        <a href="/piggy-bank" className="text-gray-400">PiggyBank</a>
-                                    </li>
-                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaTrophy className="text-gray-400 mr-3"/>
-                                        <a href="/slot-wars" className="text-gray-400">Slot Wars</a>
-                                    </li>
-                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaTrophy className="text-gray-400 mr-3"/>
-                                        <a href="/level-up-adventures" className="text-gray-400">Level Up Adventures</a>
                                     </li>
                                 </ul>
                             )}
                         </li>
                         <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaPiggyBank className="text-yellow-300 mr-3"/>
+                            <FaPiggyBank className="text-yellow-300 mr-3" />
                             <a href="/vip" className="text-yellow-300">Banking</a>
                         </li>
                         <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaStar className="text-yellow-300 mr-3"/>
+                            <FaStar className="text-yellow-300 mr-3" />
                             <a href="/vip" className="text-yellow-300">VIP</a>
                         </li>
                         <li className="relative py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaQuestionCircle className="text-yellow-300 mr-3"/>
-                            <div className="flex justify-between items-center w-full cursor-pointer"
-                                 onClick={toggleSupport}>
+                            <FaQuestionCircle className="text-yellow-300 mr-3" />
+                            <div className="flex justify-between items-center w-full cursor-pointer" onClick={toggleSupport}>
                                 <span className="text-yellow-300 mr-3">Support</span>
-                                <span
-                                    className={`transition-transform duration-300 text-yellow-300 mr-3  ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
+                                <span className={`transition-transform duration-300 text-yellow-300 mr-3  ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
                             </div>
                             {supportOpen && (
                                 <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaQuestionCircle className="text-gray-400 mr-3"/>
+                                        <FaQuestionCircle className="text-gray-400 mr-3" />
                                         <a href="/support-contact" className="text-gray-400">Contact Us</a>
                                     </li>
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaQuestionCircle className="text-gray-400 mr-3"/>
+                                        <FaQuestionCircle className="text-gray-400 mr-3" />
                                         <a href="/support-faq" className="text-gray-400">FAQ</a>
                                     </li>
                                 </ul>
                             )}
                         </li>
-
                     </ul>
                 </nav>
             )}

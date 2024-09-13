@@ -4,7 +4,7 @@ import img from '../assets/mainpagepic.png';
 import GameCarousel from './GameCarousel';
 import JackpotSection from './JackpotSection.jsx';
 import FeedbackCard from './FeedbackCard';
-import Signup from './Signup';
+import Signup from '../Signup';
 import BitSpin365_logo from '../assets/BitSpin365_logo.png'
 const LandingPage = () => {
     const [darkMode, setDarkMode] = useState(false);
