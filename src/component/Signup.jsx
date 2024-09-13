@@ -4,17 +4,19 @@ import Bonus from '../assets/Bonus.jpg'; // Example background image path
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import AddDetails from './AddDetails';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const Signup = ({ onClose }) => {
     const [formData, setFormData] = useState({
         email: '',
-        password: '',
+        //password: '',
+        username: '',
+        locale: '',
         is18OrAbove: false,
         agreeToTerms: false,
     });
-    const [showPassword, setShowPassword] = useState(false);
+    const [showUsername, setShowUsername] = useState(false);
     const [errors, setErrors] = useState({});
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
@@ -22,6 +24,7 @@ const Signup = ({ onClose }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [showAddDetails, setShowAddDetails] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const modalRef = useRef(null);
     //add formRef(null)
@@ -43,7 +46,7 @@ const Signup = ({ onClose }) => {
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const validatePassword = (password) => password.length >= 8;
+    const validateUsername = (username) => username.length >= 8;
 
     //validateCheckBox for is18OrAbove;
     const validateCheckBox = () => formData.is18OrAbove;
@@ -69,11 +72,11 @@ const Signup = ({ onClose }) => {
             } else {
                 error.email = ''; // Clear error if email is valid
             }
-        } else if (name === 'password') {
-            if (!validatePassword(value)) {
-                error.password = 'Password must be at least 8 characters long, contain at least one uppercase letter, one digit, and one special character.';
+        } else if (name === 'username') {
+            if (!validateUsername(value)) {
+                error.username = 'username must be at least 8 characters long';
             } else {
-                error.password = ''; // Clear error if password is valid
+                error.username = ''; // Clear error if username is valid
             }
         }else if (name === 'is18OrAbove') {
             if (!validateCheckbox()) {
@@ -108,7 +111,7 @@ const Signup = ({ onClose }) => {
 //             setIsRegistered(true);
 //             setErrorMessage('');
             console.log('navigating to add details page');
-            navigate('/add-details');
+            navigate({ ...location, pathname: '/add-details' });
             console.log('navigating to add details page');
         },
         onError: (error) => {
@@ -117,34 +120,37 @@ const Signup = ({ onClose }) => {
         }
     });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
 
+    const validateForm = () => {
         //const newErrors = {};
         const errors = {};
 
         if (!validateEmail(formData.email)) {
             errors.email = 'Please enter a valid email address';
         }
-
-        if (!validatePassword(formData.password)) {
-            errors.password = 'Password must be at least 6 characters long';
+        if (!validateUsername(formData.username)) {
+            errors.username = 'username must be at least 8 characters long';
         }
-
         if (!validateCheckBox()) {
             errors.is18OrAbove = 'You must be 18 years or older';
         }
-
         if (!validateAgreeToTerms()) {
             errors.agreeToTerms = 'You must agree to the terms & conditions';
         }
+        return errors;
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const errors = validateForm();
 
         setErrors(errors);
 
         if (Object.keys(errors).length === 0) {
             const formDataWithoutConsent={
                 email: formData.email,
-                password: formData.password,
+                username: formData.username,
             };
             console.log('Signup form submitted:', formDataWithoutConsent);
             mutation.mutate(formDataWithoutConsent);
@@ -152,7 +158,7 @@ const Signup = ({ onClose }) => {
         }
     };
 
-    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const toggleUsernameVisibility = () => setShowUsername(!showUsername);
 
     const handleClose = () => setShowConfirmationDialog(true);
 
@@ -208,28 +214,28 @@ const Signup = ({ onClose }) => {
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                             </div>
 
-                            {/* Password Input */}
+                            {/* username Input */}
                             <div className="relative mb-4">
                                 <FaLock className="absolute top-4 left-3 text-gray-500"/>
                                 <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
+                                    type={showUsername ? 'text' : 'username'}
+                                    name="username"
+                                    value={formData.username}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    placeholder="Enter your password"
+                                    placeholder="Enter your username"
                                     className={`w-full p-3 pl-10 border ${
-                                        errors.password ? 'border-red-500' : 'border-gray-300'//error may give issues.
+                                        errors.username ? 'border-red-500' : 'border-gray-300'//error may give issues.
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                                 <button
                                     type="button"
-                                    onClick={togglePasswordVisibility}
+                                    onClick={toggleUsernameVisibility}
                                     className="absolute top-3 right-3 text-gray-500"
                                 >
-                                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                                    {showUsername ? <FaEyeSlash/> : <FaEye/>}
                                 </button>
-                                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                                {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
                             </div>
 
                             {/* T&C and Age Checkboxes */}

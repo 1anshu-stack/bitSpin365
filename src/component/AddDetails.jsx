@@ -19,6 +19,7 @@ const AddDetails = () => {
   const [details, setDetails] = useState({
     fname: '',
     lname: '',
+    password:'',
     birthDate: '',
     address: '',
     city: '',
@@ -35,66 +36,82 @@ const AddDetails = () => {
       mutationFn: ADD_DETAILS_MUTATION,
   });
 
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+      const errors = {};
+
+          if (!details.fname) {
+            errors.fname = 'Please enter your first name';
+          }
+
+          if (!details.lname) {
+            errors.lname = 'Please enter your last name';
+          }
+          if (!details.password){
+              errors.password = 'please enter your password';
+          }
+
+          if (!details.birthDate) {
+            errors.birthDate = 'Please enter your date of birth';
+          }
+
+          if (!details.address) {
+            errors.address = 'Please enter your address';
+          }
+
+          if (!details.city) {
+            errors.city = 'Please enter your city';
+          }
+
+          if (!details.country) {
+            errors.country = 'Please enter your country';
+          }
+
+          if (!details.postcode) {
+            errors.postcode = 'Please enter your postcode';
+          }
+
+          if (!details.phone) {
+            errors.phone = 'Please enter your phone number';
+          }
+
+          if (!details.question) {
+            errors.question = 'Please select a security question';
+          }
+
+          if (!details.answer) {
+            errors.answer = 'Please enter an answer';
+          }
+      return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = {};
-
-    if (!details.fname) {
-      errors.fname = 'Please enter your first name';
-    }
-
-    if (!details.lname) {
-      errors.lname = 'Please enter your last name';
-    }
-
-    if (!details.birthDate) {
-      errors.birthDate = 'Please enter your date of birth';
-    }
-
-    if (!details.address) {
-      errors.address = 'Please enter your address';
-    }
-
-    if (!details.city) {
-      errors.city = 'Please enter your city';
-    }
-
-    if (!details.country) {
-      errors.country = 'Please enter your country';
-    }
-
-    if (!details.postcode) {
-      errors.postcode = 'Please enter your postcode';
-    }
-
-    if (!details.phone) {
-      errors.phone = 'Please enter your phone number';
-    }
-
-    if (!details.question) {
-      errors.question = 'Please select a security question';
-    }
-
-    if (!details.answer) {
-      errors.answer = 'Please enter an answer';
-    }
+    const errors = validateForm();
 
     setErrors(errors);
 
     if (Object.keys(errors).length === 0 && token) {
         console.log('Details:', details);
         console.log('Token:', token);
-        mutate({ details, context: { headers: { Authorization: `Bearer ${token}`}}}, {
-            onSuccess: () => {
-                navigate('/login');
-                alert('Details added successfully!');
-            },
-            onError: (error) => {
-                console.log('error is here')
-                console.error(error);
-            },
-        });
+        try{
+            mutate({ details, context: { headers: { Authorization: `Bearer ${token}`} } }, {
+                onSuccess: (data) => {
+                    console.log('Account created successfully:', data);
+                    navigate('/login', { replace: true });
+                    alert('Details added successfully!');
+                },
+                onError: (error) => {
+                    console.error('error adding your details:', error);
+                    alert('Error adding your details. Please try again!');
+                },
+            });
+        }catch(error){
+            console.log('error adding your details:', error);
+            alert('Error creating account. Please try again!');
+        }
     }else {
         console.log('token id not defined');
     }
@@ -136,6 +153,18 @@ const AddDetails = () => {
                       errors.lname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
+                </div>
+                <div className="relative mb-4">
+                    <input
+                       type="text"
+                       name="password"
+                       value={details.password}
+                       onChange={(e) => setDetails({ ...details, password: e.target.value })}
+                       placeholder="Password"
+                       className={`w-full p-3 border ${
+                           errors.password ? 'border-red-500' : 'border-gray-300'
+                       } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                    />
                 </div>
                 <div className="relative mb-4">
                   <input
