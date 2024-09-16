@@ -23,13 +23,12 @@ const Signup = ({ onClose }) => {
     const [errors, setErrors] = useState({});
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Show the success message modal
 
     const modalRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target) && !RegistrationClose) {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
                 setShowConfirmationDialog(true);
             }
         };
@@ -63,7 +62,7 @@ const Signup = ({ onClose }) => {
         }
 
         if (!validatePassword(formData.password)) {
-            newErrors.password = 'Password must be at least 6 characters long';
+            newErrors.password = 'Password must be at least 8 characters long';
         }
 
         if (!formData.is18OrAbove) {
@@ -85,30 +84,24 @@ const Signup = ({ onClose }) => {
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const handleClose = () => setShowConfirmationDialog(true);
-    const Close = () => {
-        setShowSuccessMessage(true);
-    }
+
     const confirmClose = () => {
         setShowConfirmationDialog(false);
         onClose();
     };
-    const RegistrationClose = () => {
-        setShowConfirmationDialog(false);
-        onClose();
-    }
+
     const cancelClose = () => setShowConfirmationDialog(false);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
                 ref={modalRef}
-                className="bg-white rounded-lg w-full max-w-4xl h-100% md:h-4/5 overflow-auto shadow-lg flex flex-col md:flex-row"
+                className="bg-white rounded-lg w-full max-w-4xl h-full md:h-auto overflow-auto shadow-lg flex flex-col md:flex-row"
             >
                 {/* Image Section */}
-                <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden bg-gray-200">
+                <div className="w-full md:w-1/2 h-68 md:h-100 flex items-center justify-center overflow-hidden bg-gray-200">
                     <img src={Bonus} alt="Signup Background" className="w-full h-full object-cover"/>
                 </div>
-
 
                 {/* Form Section */}
                 <div
@@ -123,8 +116,9 @@ const Signup = ({ onClose }) => {
 
                     {!isRegistered ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-6">Welcome to
-                                Bitspin365!</h2>
+                            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center mb-6">
+                                Welcome to Bitspin365!
+                            </h2>
 
                             {/* Email Input */}
                             <div className="relative mb-4">
@@ -172,7 +166,7 @@ const Signup = ({ onClose }) => {
                                     name="agreeToTerms"
                                     checked={formData.agreeToTerms}
                                     onChange={handleChange}
-                                    className="mr-2 w-6 h-6"
+                                    className="mr-2 w-7 h-6"
                                 />
                                 <label htmlFor="agreeToTerms" className="text-gray-600 font-bold">
                                     I agree to the terms & conditions of Bitspin365
@@ -263,8 +257,8 @@ const Signup = ({ onClose }) => {
                                 />
                             </div>
 
-                            {/* City Input */}
-                            <div className="relative mb-4">
+                            {/* City and Country Inputs */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input
                                     type="text"
                                     name="city"
@@ -275,10 +269,7 @@ const Signup = ({ onClose }) => {
                                         errors.city ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
-                            </div>
 
-                            {/* Country Input */}
-                            <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="country"
@@ -308,30 +299,35 @@ const Signup = ({ onClose }) => {
                             {/* Phone Input */}
                             <div className="relative mb-4">
                                 <input
-                                    type="tel"
+                                    type="text"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    placeholder="Phone Number"
+                                    placeholder="Phone"
                                     className={`w-full p-3 border ${
                                         errors.phone ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                             </div>
 
-                            {/* Security Question Input */}
+                            {/* Security Question */}
                             <div className="relative mb-4">
-                                <input
-                                    type="text"
+                                <select
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
-                                    disabled
-                                    placeholder="What is your favourite color?"
-                                    className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 focus:outline-none"
-                                />
+                                    onChange={handleChange}
+                                    className={`w-full p-3 border ${
+                                        errors.securityQuestion ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                >
+                                    <option value="">Select a security question</option>
+                                    <option value="favoriteColor">What is your favorite color?</option>
+                                    <option value="petName">What is your pet name?</option>
+                                    <option value="birthCity">In which city were you born?</option>
+                                </select>
                             </div>
 
-                            {/* Answer Input */}
+                            {/* Answer to Security Question */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
@@ -345,13 +341,11 @@ const Signup = ({ onClose }) => {
                                 />
                             </div>
 
-                            {/* Save Changes Button */}
                             <button
-                                type="button"
-                                onClick={Close}
-                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
+                                type="submit"
+                                className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                                Save Changes
+                                Complete Registration
                             </button>
                         </form>
                     )}
@@ -378,26 +372,11 @@ const Signup = ({ onClose }) => {
                             >
                                 Exit
                             </button>
+
                         </div>
                     </div>
                 </div>
             )}
-            {/* Success Message Modal */}
-            {showSuccessMessage && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-                        <h2 className="text-2xl font-bold mb-4">Registration Successful!</h2>
-                        <p className="mb-4">Welcome to Bitspin365. An email has been sent for verification.</p>
-                        <button
-                            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
-                            onClick={RegistrationClose}
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-
         </div>
     );
 };
