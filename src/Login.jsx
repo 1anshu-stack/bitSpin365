@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import BigWin from './assets/BigWin.jpg'; // Example background image path
 import { FaGoogle, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa'; // For icons
-import'./global.css';
+import './global.css';
+
 const Login = ({ onClose }) => {
   const [formData, setFormData] = useState({
     email: '',
@@ -51,13 +52,13 @@ const Login = ({ onClose }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div
             ref={modalRef}
-            className="bg-white rounded-lg w-full max-w-4xl h-auto md:h-4/5 overflow-hidden shadow-lg flex flex-col md:flex-row"
+            className="bg-white rounded-lg w-full max-w-4xl h-full md:h-4/5 overflow-hidden shadow-lg flex flex-col md:flex-row"
         >
-          {/* Image Section */}
-          <div className="w-full md:w-1/2 h-full hidden md:flex items-center justify-center overflow-hidden">
+          {/* Image Section - visible on all screen sizes */}
+          <div className="w-full md:w-1/2 h-full md:h-full flex items-center justify-center overflow-hidden">
             <img
                 src={BigWin}
-                alt="Casino Background"
+                alt="Background"
                 className="w-full h-full object-cover"
             />
           </div>
@@ -86,7 +87,7 @@ const Login = ({ onClose }) => {
               {!isReset ? (
                   <>
                     {/* Email Input */}
-                    <div className="relative mb-4 ">
+                    <div className="relative mb-4">
                       <FaEnvelope className="absolute top-4 left-3 text-gray-500" />
                       <input
                           type="email"
@@ -95,7 +96,7 @@ const Login = ({ onClose }) => {
                           onChange={handleChange}
                           placeholder="Enter your email"
                           className="input-style"
-                          />
+                      />
                     </div>
 
                     {/* Password Input */}
@@ -108,13 +109,17 @@ const Login = ({ onClose }) => {
                           onChange={handleChange}
                           placeholder="Enter your password"
                           className="input-style"
-                          />
+                      />
                       <button
                           type="button"
                           onClick={togglePasswordVisibility}
                           className="absolute top-3 right-3 text-gray-500"
                       >
-                        {showPassword ? <FaEyeSlash className="absolute top-1 right-4 text-gray-500" /> : <FaEye className="absolute top-1 right-4 text-gray-500" />}
+                        {showPassword ? (
+                            <FaEyeSlash className="absolute top-1 right-4 text-gray-500" />
+                        ) : (
+                            <FaEye className="absolute top-1 right-4 text-gray-500" />
+                        )}
                       </button>
                     </div>
 
@@ -138,12 +143,15 @@ const Login = ({ onClose }) => {
               ) : (
                   <div className="space-y-4">
                     <p className="text-gray-600 text-center mb-4">
-                      Fill in your e-mail address and we will send you instructions on how to reset your password via
-                      e-mail.
+                      Fill in your e-mail address and we will send you instructions
+                      on how to reset your password via e-mail.
                     </p>
                     <p className="text-gray-600 text-center mb-4">
-                      Contact us via <a href="/support" className="text-green-600 hover:underline">Support</a> if you
-                      need further help.
+                      Contact us via{' '}
+                      <a href="/support" className="text-green-600 hover:underline">
+                        Support
+                      </a>{' '}
+                      if you need further help.
                     </p>
                     <div className="relative mb-4">
                       <FaEnvelope className="absolute top-4 left-3 text-gray-500" />
@@ -163,12 +171,20 @@ const Login = ({ onClose }) => {
                       Reset Password
                     </button>
                     <p className="text-center text-gray-600">
-                      <a href="/forgot-password" className="text-gray-600 hover:underline">Didn't receive unlock
-                        instructions?</a>
+                      <a
+                          href="/forgot-password"
+                          className="text-gray-600 hover:underline"
+                      >
+                        Didn't receive unlock instructions?
+                      </a>
                     </p>
                     <p className="text-center text-gray-600">
-                      <a href="/forgot-password" className="text-gray-600 hover:underline">Didn't receive
-                        confirmation instructions?</a>
+                      <a
+                          href="/forgot-password"
+                          className="text-gray-600 hover:underline"
+                      >
+                        Didn't receive confirmation instructions?
+                      </a>
                     </p>
                     <button
                         type="button"
