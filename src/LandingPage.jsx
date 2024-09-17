@@ -52,45 +52,49 @@ const LandingPage = () => {
                         className="w-full h-full"
                     />
                 </div>
-                {/* Centered ResponsiveBox */}
-                {/*<div className="absolute inset-0 flex items-center justify-center">*/}
-                {/*    <ResponsiveBox*/}
-                {/*        openSignup={openSignup}*/}
-                {/*        amount={amount}*/}
-                {/*        handleAmountChange={handleAmountChange}*/}
-                {/*        currency={currency}*/}
-                {/*        handleCurrencyChange={handleCurrencyChange}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                Centered ResponsiveBox
+                <div className="relative w-full h-full">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <ResponsiveBox
+                            openSignup={openSignup}
+                            amount={amount}
+                            handleAmountChange={handleAmountChange}
+                            currency={currency}
+                            handleCurrencyChange={handleCurrencyChange}
+                        />
+                    </div>
+                </div>
 
-</section>
+            </section>
 
 
-    {/* Other Sections */
-    }
-    <section className="py-10 md:py-20 px-4 md:px-6">
-        <h3 className="text-2xl md:text-3xl font-bold mb-8">Featured Games</h3>
+            {/* Other Sections */
+            }
+            <section className="py-5 md:py-10 px-2 md:px-4">
+        <h3 className="text-2xl md:text-3xl font-bold mb-4">Featured Games</h3>
         <GameCarousel/>
     </section>
 
-    <section className="py-10 md:py-20 px-4 md:px-6">
-        <h3 className="text-2xl md:text-3xl font-bold mb-8">Table Games</h3>
+    <section className="py-5 md:py-5 px-2 md:px-4">
+        <h3 className="text-2xl md:text-3xl font-bold mb-4">Table Games</h3>
                 <GameCarousel/>
             </section>
 
-            <section className="py-10 md:py-20 px-4 md:px-6">
-                <h3 className="text-2xl md:text-3xl font-bold mb-8">Roulette Games</h3>
+            <section className="py-5 md:py-5 px-2 md:px-4">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">Roulette Games</h3>
                 <GameCarousel/>
             </section>
 
+            <div className=" py-5 md:py-25 px-2 md:px-4 text-2xl md:text-3xl font-bold">
             <JackpotSection/>
+            </div>
 
-            <section className="py-10 md:py-20 px-4 md:px-6">
-                <h3 className="text-2xl md:text-3xl font-bold mb-8">Live Casino</h3>
+            <section className="py-5 md:py-30 px-2 md:px-4">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">Live Casino</h3>
                 <GameCarousel/>
             </section>
 
-            <section className="py-10 md:py-20 px-4 md:px-6" onClick={handleClickOutside}>
+            <section className="py-10 md:py-15 px-4 md:px-6" onClick={handleClickOutside}>
                 <h3 className="text-2xl md:text-3xl font-bold mb-8">User Feedback</h3>
                 <div className="relative h-64 md:h-80 overflow-hidden">
                     {!animationPaused && (
