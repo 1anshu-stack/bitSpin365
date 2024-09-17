@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Header from './component/Header'; // Import the Header component
 import LandingPage from './LandingPage.jsx'; // Import the LandingPage component
 import Signup from './Signup.jsx'; // Import the Signup component
@@ -9,11 +9,11 @@ function App() {
     return (
         <Router>
             <div className="app">
-                <Header /> {/* Render the Header component */}
+                <Header/> {/* Render the Header component */}
                 <Routes>
-                    <Route path="/" element={<LandingPage />} /> {/* Landing Page */}
-                    <Route path="/signup" element={<Signup />} /> {/* Signup Page */}
-                    <Route path="/login" element={<Login />} /> {/* Login Page */}
+                    <Route path="/" element={<LandingPage/>}/> {/* Landing Page */}
+                    <Route path="/signup" element={<Signup/>}/> {/* Signup Page */}
+                    <Route path="/login" element={<Login/>}/> {/* Login Page */}
                 </Routes>
             </div>
         </Router>
@@ -21,26 +21,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // import React from 'react';

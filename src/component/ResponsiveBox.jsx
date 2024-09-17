@@ -1,11 +1,10 @@
 import React from 'react';
 import BitSpin365_logo from '../assets/BitSpin365_logo.png';
-import Signup from "../Signup.jsx";
 
 const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handleCurrencyChange }) => {
     return (
-        <div className="absolute inset-0 flex  sm:w-[30%] md:w-[100%] items-center justify-center">
-            <div className="bg-gradient-to-br from-yellow-300 via-pink-200 to-white text-gray-800 rounded-xl shadow-2xl flex flex-col md:flex-row w-11/12 md:w-3/4 lg:w-1/2 h-auto md:h-100 p-4 md:p-6">
+        <div className="absolute inset-0 flex items-center justify-center w-full h-full bg-cover bg-center">
+            <div className="bg-gradient-to-br from-yellow-300 via-pink-200 to-white text-gray-800 rounded-xl shadow-2xl flex flex-col md:flex-row w-11/12 sm:w-3/4 md:w-1/2 h-auto p-4 md:p-6 space-y-6 md:space-y-0 md:space-x-6">
                 {/* Form Section */}
                 <div className="flex-1 flex-col items-center justify-center space-y-4">
                     <h2 className="text-lg md:text-2xl font-bold mb-4 text-center">Welcome to the Ultimate Gaming Experience!</h2>
@@ -36,11 +35,11 @@ const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handl
                     </button>
                 </div>
                 {/* Image Section */}
-                <div className="flex-1 mt-4 md:mt-0">
+                <div className="flex-1 flex items-center justify-center mt-4 md:mt-10">
                     <img
                         src={BitSpin365_logo}
-                        alt="Gaming Image"
-                        className="w-full h-full object-cover rounded-lg"
+                        alt="BitSpin365 Logo"
+                        className="w-full h-full object-cover"
                     />
                 </div>
             </div>

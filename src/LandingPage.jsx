@@ -44,47 +44,50 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
             {/* Hero Section */}
-            <section className="flex flex-col items-center justify-center text-center py-10 space-y-6 relative">
-                <div className="relative w-full h-full md:h-150 lg:h-170">
+            <section className="flex flex-col items-center justify-center text-center py-10 relative min-h-screen">
+                <div className="absolute inset-0 w-full h-full">
                     <motion.img
                         src={img}
                         alt="image"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                     />
-                    {/* Centered ResponsiveBox */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <ResponsiveBox
-                            openSignup={openSignup}
-                            amount={amount}
-                            handleAmountChange={handleAmountChange}
-                            currency={currency}
-                            handleCurrencyChange={handleCurrencyChange}
-                        />
-                    </div>
                 </div>
-            </section>
+                {/* Centered ResponsiveBox */}
+                {/*<div className="absolute inset-0 flex items-center justify-center">*/}
+                {/*    <ResponsiveBox*/}
+                {/*        openSignup={openSignup}*/}
+                {/*        amount={amount}*/}
+                {/*        handleAmountChange={handleAmountChange}*/}
+                {/*        currency={currency}*/}
+                {/*        handleCurrencyChange={handleCurrencyChange}*/}
+                {/*    />*/}
+                {/*</div>*/}
 
-            {/* Other Sections */}
-            <section className="py-10 md:py-20 px-4 md:px-6">
-                <h3 className="text-2xl md:text-3xl font-bold mb-8">Featured Games</h3>
-                <GameCarousel />
-            </section>
+</section>
 
-            <section className="py-10 md:py-20 px-4 md:px-6">
-                <h3 className="text-2xl md:text-3xl font-bold mb-8">Table Games</h3>
-                <GameCarousel />
+
+    {/* Other Sections */
+    }
+    <section className="py-10 md:py-20 px-4 md:px-6">
+        <h3 className="text-2xl md:text-3xl font-bold mb-8">Featured Games</h3>
+        <GameCarousel/>
+    </section>
+
+    <section className="py-10 md:py-20 px-4 md:px-6">
+        <h3 className="text-2xl md:text-3xl font-bold mb-8">Table Games</h3>
+                <GameCarousel/>
             </section>
 
             <section className="py-10 md:py-20 px-4 md:px-6">
                 <h3 className="text-2xl md:text-3xl font-bold mb-8">Roulette Games</h3>
-                <GameCarousel />
+                <GameCarousel/>
             </section>
 
-            <JackpotSection />
+            <JackpotSection/>
 
             <section className="py-10 md:py-20 px-4 md:px-6">
                 <h3 className="text-2xl md:text-3xl font-bold mb-8">Live Casino</h3>
-                <GameCarousel />
+                <GameCarousel/>
             </section>
 
             <section className="py-10 md:py-20 px-4 md:px-6" onClick={handleClickOutside}>
@@ -93,7 +96,7 @@ const LandingPage = () => {
                     {!animationPaused && (
                         <motion.div
                             className="flex space-x-6 py-4 absolute top-0"
-                            animate={{ x: ['0%', '-100%'] }}
+                            animate={{x: ['0%', '-100%']}}
                             transition={{
                                 repeat: Infinity,
                                 duration: 20,
@@ -104,9 +107,9 @@ const LandingPage = () => {
                                 <motion.div
                                     key={index}
                                     className="feedback-card flex-shrink-0 w-80"
-                                    initial={{ opacity: 0, x: 100 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -100 }}
+                                    initial={{opacity: 0, x: 100}}
+                                    animate={{opacity: 1, x: 0}}
+                                    exit={{opacity: 0, x: -100}}
                                     transition={{
                                         duration: 0.5,
                                         delay: index * 0.1,
@@ -114,7 +117,7 @@ const LandingPage = () => {
                                         stiffness: 300,
                                         damping: 20
                                     }}
-                                    whileHover={{ scale: 1.08, y: -8 }}
+                                    whileHover={{scale: 1.08, y: -8}}
                                 >
                                     <FeedbackCard
                                         {...feedback}
@@ -139,7 +142,8 @@ const LandingPage = () => {
             </section>
 
             {/* Let's Get Started Section */}
-            <section className="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 py-10 md:py-16 px-6 md:px-8 text-center">
+            <section
+                className="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 py-10 md:py-16 px-6 md:px-8 text-center">
                 <div className="container mx-auto">
                     <h3 className="text-3xl md:text-4xl font-bold text-yellow-400">
                         Let's Get Started
@@ -179,7 +183,7 @@ const LandingPage = () => {
                 <p>All rights reserved.</p>
             </footer>
 
-            {showSignup && <Signup closeSignup={closeSignup} />}
+            {showSignup && <Signup closeSignup={closeSignup}/>}
         </div>
     );
 };
