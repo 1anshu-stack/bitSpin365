@@ -1,4 +1,4 @@
-import  { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Bonus from './assets/Bonus.jpg'; // Example background image path
 
@@ -24,6 +24,7 @@ const AuthForm = ({ onClose }) => {
     const [isSignup, setIsSignup] = useState(true); // Control the form mode
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false); // Add state for success dialog
 
     const modalRef = useRef(null);
 
@@ -90,11 +91,16 @@ const AuthForm = ({ onClose }) => {
     const handleClose = () => setShowConfirmationDialog(true);
 
     const confirmClose = () => {
+        setShowSuccessDialog(false); // Hide success dialog if it's shown
         setShowConfirmationDialog(false);
         onClose();
     };
 
     const cancelClose = () => setShowConfirmationDialog(false);
+
+    const completeRegistration = () => {
+        setShowSuccessDialog(true); // Show success dialog
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -221,150 +227,111 @@ const AuthForm = ({ onClose }) => {
                                 Complete your profile to enjoy all the benefits.
                             </p>
 
-                            {/* First Name Input */}
+                            {/* All additional fields */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="firstName"
                                     value={formData.firstName}
                                     onChange={handleChange}
-                                    placeholder="First Name"
-                                    className={`w-full p-3 border ${
-                                        errors.firstName ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your first name"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Last Name Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="lastName"
                                     value={formData.lastName}
                                     onChange={handleChange}
-                                    placeholder="Last Name"
-                                    className={`w-full p-3 border ${
-                                        errors.lastName ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your last name"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* DOB Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="date"
                                     name="dob"
                                     value={formData.dob}
                                     onChange={handleChange}
-                                    placeholder="Date of Birth"
-                                    className={`w-full p-3 border ${
-                                        errors.dob ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Address Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="address"
                                     value={formData.address}
                                     onChange={handleChange}
-                                    placeholder="Address"
-                                    className={`w-full p-3 border ${
-                                        errors.address ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your address"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* City Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="city"
                                     value={formData.city}
                                     onChange={handleChange}
-                                    placeholder="City"
-                                    className={`w-full p-3 border ${
-                                        errors.city ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your city"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Country Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="country"
                                     value={formData.country}
                                     onChange={handleChange}
-                                    placeholder="Country"
-                                    className={`w-full p-3 border ${
-                                        errors.country ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your country"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Postcode Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="postcode"
                                     value={formData.postcode}
                                     onChange={handleChange}
-                                    placeholder="Postcode"
-                                    className={`w-full p-3 border ${
-                                        errors.postcode ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your postcode"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Phone Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    placeholder="Phone Number"
-                                    className={`w-full p-3 border ${
-                                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your phone number"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Security Question Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
                                     onChange={handleChange}
-                                    placeholder="Security Question"
-                                    className={`w-full p-3 border ${
-                                        errors.securityQuestion ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter a security question"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-
-                            {/* Answer Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="answer"
                                     value={formData.answer}
                                     onChange={handleChange}
-                                    placeholder="Answer"
-                                    className={`w-full p-3 border ${
-                                        errors.answer ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    placeholder="Enter your answer"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
 
                             <button
                                 type="button"
-                                onClick={confirmClose}
-                                className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
+                                onClick={completeRegistration}
+                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
                             >
                                 Complete Registration
                             </button>
@@ -373,27 +340,44 @@ const AuthForm = ({ onClose }) => {
                 </div>
             </div>
 
+            {/* Confirmation Dialog */}
             {showConfirmationDialog && (
-                <div className="fixed inset-0 flex items-center justify-center z-60 bg-black bg-opacity-70">
-                    <div className="bg-white rounded-lg p-6 max-w-md mx-4">
-                        <h2 className="text-2xl font-bold text-center mb-4">Are you sure you want to close the form?</h2>
-                        <p className="text-center text-gray-600 mb-6">Your changes might not be saved.</p>
-                        <div className="flex justify-around">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 className="text-lg font-semibold mb-4">Are you sure you want to close this form?</h3>
+                        <div className="flex justify-end gap-4">
                             <button
                                 type="button"
                                 onClick={confirmClose}
                                 className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                                Confirm
+                                Yes
                             </button>
                             <button
                                 type="button"
                                 onClick={cancelClose}
-                                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                                className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
                             >
-                                Cancel
+                                No
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Dialog */}
+            {showSuccessDialog && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
+                    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <h3 className="text-xl font-semibold mb-4">Registration Successful!</h3>
+                        <p className="mb-4">Congratulations! You’ve joined Bitspin365. Now, let’s make your experience amazing!</p>
+                        <button
+                            type="button"
+                            onClick={() => setShowSuccessDialog(false)}
+                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                            OK
+                        </button>
                     </div>
                 </div>
             )}
