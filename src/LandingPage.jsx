@@ -4,7 +4,6 @@ import img from './assets/mainpagepic.png';
 import GameCarousel from './component/GameCarousel.jsx';
 import JackpotSection from './component/JackpotSection.jsx';
 import FeedbackCard from './component/FeedbackCard.jsx';
-import Signup from './Signup.jsx';
 import ResponsiveBox from "./component/ResponsiveBox.jsx";
 
 const LandingPage = () => {

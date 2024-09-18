@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaTrophy, FaQuestionCircle, FaStar } from 'react-icons/fa';
-import Login from '../Login.jsx';
-import Signup from '../Signup.jsx';
+import AuthForm from '../AuthForm.jsx'; // Import AuthForm
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [showLogin, setShowLogin] = useState(false);
-    const [showSignup, setShowSignup] = useState(false);
+    const [showAuthForm, setShowAuthForm] = useState(false);
+    const [authFormType, setAuthFormType] = useState('login'); // 'login' or 'signup'
     const [promotionsOpen, setPromotionsOpen] = useState(false);
     const [supportOpen, setSupportOpen] = useState(false);
 
@@ -25,20 +24,13 @@ const Header = () => {
         setPromotionsOpen(false); // Close promotions dropdown if support is opened
     };
 
-    const openLogin = () => {
-        setShowLogin(true);
+    const openAuthForm = (type) => {
+        setAuthFormType(type);
+        setShowAuthForm(true);
     };
 
-    const closeLogin = () => {
-        setShowLogin(false);
-    };
-
-    const openSignup = () => {
-        setShowSignup(true);
-    };
-
-    const closeSignup = () => {
-        setShowSignup(false);
+    const closeAuthForm = () => {
+        setShowAuthForm(false);
     };
 
     useEffect(() => {
@@ -66,18 +58,17 @@ const Header = () => {
                     <h1 className="text-3xl font-bold text-yellow-300">BitSpin365</h1>
                 </div>
                 <div className="nav-buttons flex gap-4">
-                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openLogin}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={() => openAuthForm('login')}>
                         Login
                     </button>
-                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openSignup}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={() => openAuthForm('signup')}>
                         Signup
                     </button>
                 </div>
             </div>
 
             {menuOpen && (
-                <nav
-                    className="dropdown-menu fixed top-0 left-0 w-[100%] sm:w-[50%] md:w-[30%] h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col transition-all duration-300">
+                <nav className="dropdown-menu fixed top-0 left-0 w-full sm:w-3/4 md:w-1/3 h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col transition-all duration-300">
                     <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700">
                         <h1 className="text-2xl font-bold text-yellow-300">BitSpin365</h1>
                         <button onClick={toggleMenu} className="text-white text-3xl">&times;</button>
@@ -91,10 +82,7 @@ const Header = () => {
                             <FaGift className="text-yellow-300 mr-3" />
                             <div className="flex justify-between items-center w-full cursor-pointer" onClick={togglePromotions}>
                                 <span className="text-yellow-300 mr-3">Promotions</span>
-                                <span
-                                    className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>
-                        ▼
-                    </span>
+                                <span className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
                             </div>
                             {promotionsOpen && (
                                 <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
@@ -121,7 +109,7 @@ const Header = () => {
                             <FaQuestionCircle className="text-yellow-300 mr-3" />
                             <div className="flex justify-between items-center w-full cursor-pointer" onClick={toggleSupport}>
                                 <span className="text-yellow-300 mr-3">Support</span>
-                                <span className={`transition-transform duration-300 text-yellow-300 mr-3  ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
+                                <span className={`transition-transform duration-300 text-yellow-300 mr-3 ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
                             </div>
                             {supportOpen && (
                                 <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
@@ -140,20 +128,9 @@ const Header = () => {
                 </nav>
             )}
 
-            {
-                showLogin && (
-                    <Login onClose={closeLogin}/>
-                )
-            }
-            {
-                showSignup && (
-                    <Signup onClose={closeSignup}/>
-                )
-            }
+            {showAuthForm && <AuthForm formType={authFormType} onClose={closeAuthForm} />}
         </header>
-    )
-        ;
-    }
-;
+    );
+};
 
 export default Header;

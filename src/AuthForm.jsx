@@ -2,12 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Bonus from './assets/Bonus.jpg'; // Example background image path
 
-const Signup = ({ onClose }) => {
+const AuthForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        is18OrAbove: false,
-        agreeToTerms: false,
         firstName: '',
         lastName: '',
         dob: '',
@@ -18,11 +16,14 @@ const Signup = ({ onClose }) => {
         phone: '',
         securityQuestion: '',
         answer: '',
+        is18OrAbove: false,
+        agreeToTerms: false,
     });
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+    const [isSignup, setIsSignup] = useState(true); // Control the form mode
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
     const modalRef = useRef(null);
 
@@ -76,8 +77,11 @@ const Signup = ({ onClose }) => {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            console.log('Signup form submitted:', formData);
-            setIsRegistered(true); // Show registration form
+            if (isSignup) {
+                setIsRegistered(true); // Show registration form
+            } else {
+                console.log('Login form submitted:', formData);
+            }
         }
     };
 
@@ -100,12 +104,13 @@ const Signup = ({ onClose }) => {
             >
                 {/* Image Section */}
                 <div className="w-full md:w-1/2 h-68 md:h-100 flex items-center justify-center overflow-hidden bg-gray-200">
-                    <img src={Bonus} alt="Signup Background" className="w-full h-full object-cover"/>
+                    <img src={Bonus} alt="Signup Background" className="w-full h-full object-cover" />
                 </div>
 
                 {/* Form Section */}
                 <div
-                    className="w-full md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-yellow-50 to-yellow-100">
+                    className="w-full md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-yellow-50 to-yellow-100"
+                >
                     <button
                         type="button"
                         onClick={handleClose}
@@ -117,12 +122,12 @@ const Signup = ({ onClose }) => {
                     {!isRegistered ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center mb-6">
-                                Welcome to Bitspin365!
+                                {isSignup ? 'Sign Up' : 'Log In'}
                             </h2>
 
                             {/* Email Input */}
                             <div className="relative mb-4">
-                                <FaEnvelope className="absolute top-4 left-3 text-gray-500"/>
+                                <FaEnvelope className="absolute top-4 left-3 text-gray-500" />
                                 <input
                                     type="email"
                                     name="email"
@@ -138,7 +143,7 @@ const Signup = ({ onClose }) => {
 
                             {/* Password Input */}
                             <div className="relative mb-4">
-                                <FaLock className="absolute top-4 left-3 text-gray-500"/>
+                                <FaLock className="absolute top-4 left-3 text-gray-500" />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
@@ -154,46 +159,60 @@ const Signup = ({ onClose }) => {
                                     onClick={togglePasswordVisibility}
                                     className="absolute top-3 right-3 text-gray-500"
                                 >
-                                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </button>
                                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                             </div>
 
                             {/* T&C and Age Checkboxes */}
-                            <div className="flex items-center mb-2">
-                                <input
-                                    type="checkbox"
-                                    name="agreeToTerms"
-                                    checked={formData.agreeToTerms}
-                                    onChange={handleChange}
-                                    className="mr-2 w-7 h-6"
-                                />
-                                <label htmlFor="agreeToTerms" className="text-gray-600 font-bold">
-                                    I agree to the terms & conditions of Bitspin365
-                                </label>
-                            </div>
-                            {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms}</p>}
+                            {isSignup && (
+                                <>
+                                    <div className="flex items-center mb-2">
+                                        <input
+                                            type="checkbox"
+                                            name="agreeToTerms"
+                                            checked={formData.agreeToTerms}
+                                            onChange={handleChange}
+                                            className="mr-2 w-7 h-6"
+                                        />
+                                        <label htmlFor="agreeToTerms" className="text-gray-600 font-bold">
+                                            I agree to the terms & conditions of Bitspin365
+                                        </label>
+                                    </div>
+                                    {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms}</p>}
 
-                            <div className="flex items-center mb-2">
-                                <input
-                                    type="checkbox"
-                                    name="is18OrAbove"
-                                    checked={formData.is18OrAbove}
-                                    onChange={handleChange}
-                                    className="mr-2 w-6 h-6"
-                                />
-                                <label htmlFor="is18OrAbove" className="text-gray-600 font-bold">
-                                    I am 18 years or older
-                                </label>
-                            </div>
-                            {errors.is18OrAbove && <p className="text-red-500 text-sm mt-1">{errors.is18OrAbove}</p>}
+                                    <div className="flex items-center mb-2">
+                                        <input
+                                            type="checkbox"
+                                            name="is18OrAbove"
+                                            checked={formData.is18OrAbove}
+                                            onChange={handleChange}
+                                            className="mr-2 w-6 h-6"
+                                        />
+                                        <label htmlFor="is18OrAbove" className="text-gray-600 font-bold">
+                                            I am 18 years or older
+                                        </label>
+                                    </div>
+                                    {errors.is18OrAbove && <p className="text-red-500 text-sm mt-1">{errors.is18OrAbove}</p>}
+                                </>
+                            )}
 
                             <button
                                 type="submit"
                                 className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                                Sign Up
+                                {isSignup ? 'Sign Up' : 'Log In'}
                             </button>
+
+                            <p className="text-center text-gray-600">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsSignup(!isSignup)}
+                                    className="text-gray-600 hover:underline"
+                                >
+                                    {isSignup ? 'Already have an account? Log In' : 'Need an account? Sign Up'}
+                                </button>
+                            </p>
                         </form>
                     ) : (
                         <form className="space-y-2">
@@ -230,13 +249,14 @@ const Signup = ({ onClose }) => {
                                 />
                             </div>
 
-                            {/* Date of Birth Input */}
+                            {/* DOB Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="date"
                                     name="dob"
                                     value={formData.dob}
                                     onChange={handleChange}
+                                    placeholder="Date of Birth"
                                     className={`w-full p-3 border ${
                                         errors.dob ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
@@ -257,8 +277,8 @@ const Signup = ({ onClose }) => {
                                 />
                             </div>
 
-                            {/* City and Country Inputs */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* City Input */}
+                            <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="city"
@@ -269,7 +289,10 @@ const Signup = ({ onClose }) => {
                                         errors.city ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
+                            </div>
 
+                            {/* Country Input */}
+                            <div className="relative mb-4">
                                 <input
                                     type="text"
                                     name="country"
@@ -303,31 +326,28 @@ const Signup = ({ onClose }) => {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    placeholder="Phone"
+                                    placeholder="Phone Number"
                                     className={`w-full p-3 border ${
                                         errors.phone ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                             </div>
 
-                            {/* Security Question */}
+                            {/* Security Question Input */}
                             <div className="relative mb-4">
-                                <select
+                                <input
+                                    type="text"
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
                                     onChange={handleChange}
+                                    placeholder="Security Question"
                                     className={`w-full p-3 border ${
                                         errors.securityQuestion ? 'border-red-500' : 'border-gray-300'
                                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                >
-                                    <option value="">Select a security question</option>
-                                    <option value="favoriteColor">What is your favorite color?</option>
-                                    <option value="petName">What is your pet name?</option>
-                                    <option value="birthCity">In which city were you born?</option>
-                                </select>
+                                />
                             </div>
 
-                            {/* Answer to Security Question */}
+                            {/* Answer Input */}
                             <div className="relative mb-4">
                                 <input
                                     type="text"
@@ -342,7 +362,8 @@ const Signup = ({ onClose }) => {
                             </div>
 
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={confirmClose}
                                 className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
                             >
                                 Complete Registration
@@ -353,26 +374,25 @@ const Signup = ({ onClose }) => {
             </div>
 
             {showConfirmationDialog && (
-                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4">Wait! Don't leave yet!</h2>
-                        <p className="text-gray-600 mb-4">
-                            Stay with us and complete your signup for exciting rewards on Bitspin365!
-                        </p>
-                        <div className="flex justify-between">
+                <div className="fixed inset-0 flex items-center justify-center z-60 bg-black bg-opacity-70">
+                    <div className="bg-white rounded-lg p-6 max-w-md mx-4">
+                        <h2 className="text-2xl font-bold text-center mb-4">Are you sure you want to close the form?</h2>
+                        <p className="text-center text-gray-600 mb-6">Your changes might not be saved.</p>
+                        <div className="flex justify-around">
                             <button
-                                onClick={cancelClose}
-                                className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition-colors"
-                            >
-                                Back to Signup
-                            </button>
-                            <button
+                                type="button"
                                 onClick={confirmClose}
                                 className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                                Exit
+                                Confirm
                             </button>
-
+                            <button
+                                type="button"
+                                onClick={cancelClose}
+                                className="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -381,4 +401,4 @@ const Signup = ({ onClose }) => {
     );
 };
 
-export default Signup;
+export default AuthForm;
