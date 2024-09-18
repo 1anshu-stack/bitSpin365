@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaTrophy, FaQuestionCircle, FaStar } from 'react-icons/fa';
+import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaQuestionCircle, FaStar } from 'react-icons/fa';
 import AuthForm from '../AuthForm.jsx'; // Import AuthForm
 
 const Header = () => {
@@ -85,7 +85,7 @@ const Header = () => {
                                 <span className={`transition-transform duration-300 text-yellow-300 mr-3 ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
                             </div>
                             {promotionsOpen && (
-                                <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
+                                <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-80">
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
                                         <FaDollarSign className="text-gray-400 mr-3" />
                                         <a href="/jackpotz-mania" className="text-gray-400">Jackpotz Mania</a>
@@ -112,7 +112,7 @@ const Header = () => {
                                 <span className={`transition-transform duration-300 text-yellow-300 mr-3 ${supportOpen ? 'rotate-180' : ''}`}>▼</span>
                             </div>
                             {supportOpen && (
-                                <ul className="absolute left-0 top-full mt-2 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-20">
+                                <ul className="absolute left-0 top-full mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-80">
                                     <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
                                         <FaQuestionCircle className="text-gray-400 mr-3" />
                                         <a href="/support-contact" className="text-gray-400">Contact Us</a>

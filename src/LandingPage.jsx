@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import img from './assets/mainpagepic.png';
 import GameCarousel from './component/GameCarousel.jsx';
@@ -7,14 +7,13 @@ import FeedbackCard from './component/FeedbackCard.jsx';
 import ResponsiveBox from "./component/ResponsiveBox.jsx";
 
 const LandingPage = () => {
-    const [showSignup, setShowSignup] = useState(false);
+
     const [activeCard, setActiveCard] = useState(null);
     const [animationPaused, setAnimationPaused] = useState(false);
     const [amount, setAmount] = useState('');
     const [currency, setCurrency] = useState('USD');
 
-    const openSignup = () => setShowSignup(true);
-    const closeSignup = () => setShowSignup(false);
+
     const handleCardClick = (index) => {
         setActiveCard(index);
         setAnimationPaused(true);
@@ -55,7 +54,6 @@ const LandingPage = () => {
                 <div className="relative w-full h-full">
                     <div className="absolute inset-0 flex items-center justify-center">
                         <ResponsiveBox
-                            openSignup={openSignup}
                             amount={amount}
                             handleAmountChange={handleAmountChange}
                             currency={currency}
@@ -154,12 +152,6 @@ const LandingPage = () => {
                     <p className="text-md md:text-lg text-gray-300 mt-4">
                         Play the spins for a chance to win one of the BitSpin365 Jackpots!
                     </p>
-                    <button
-                        className="nav-button mt-4 py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300 md:w-auto"
-                        onClick={openSignup}
-                    >
-                        Signup now
-                    </button>
                 </div>
             </section>
 
@@ -185,8 +177,6 @@ const LandingPage = () => {
                 <p>&copy; 2024 BitSpin365</p>
                 <p>All rights reserved.</p>
             </footer>
-
-            {showSignup && <Signup closeSignup={closeSignup}/>}
         </div>
     );
 };
