@@ -4,7 +4,7 @@ import BitSpin365_logo from '../assets/BitSpin365_logo.png';
 const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handleCurrencyChange }) => {
     return (
         <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center">
-            <div className="bg-gradient-to-br from-yellow-300 via-pink-200 to-white text-gray-800 rounded-xl shadow-2xl flex flex-col md:flex-row max-w-2xl h-auto md:h-100 p-4 md:p-6  m-8 md:m-10 space-y-4 md:space-y-2 md:space-x-0">
+            <div className="bg-gradient-to-br from-yellow-300 via-pink-200 to-white text-gray-800 rounded-xl shadow-2xl flex flex-col md:flex-row max-w-2xl h-auto md:h-100 p-4 md:p-6 m-8 md:m-10 space-y-4 md:space-y-2 md:space-x-0">
                 {/* Image Section */}
                 <div className="flex-1 flex items-center justify-center">
                     <img
@@ -14,10 +14,10 @@ const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handl
                     />
                 </div>
                 {/* Form Section */}
-                <div className="flex-1 flex flex-col items-center justify-center space-y-0">
-                    <h2 className="text-lg md:text-2xl font-bold  text-center md:text-left">Welcome to the Ultimate Gaming Experience!</h2>
+                <div className="flex-1 flex flex-col items-center justify-center space-y-4">
+                    <h2 className="text-lg md:text-2xl font-bold text-center md:text-left">Welcome to the Ultimate Gaming Experience!</h2>
                     <p className="text-center md:text-left">Enter the amount and select your currency to start playing!</p>
-                    <div className="w-full space-y-2">
+                    <div className="w-full space-y-4">
                         <input
                             type="number"
                             value={amount}
