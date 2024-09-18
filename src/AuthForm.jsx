@@ -344,7 +344,7 @@ const AuthForm = ({ onClose }) => {
             {showConfirmationDialog && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-4">Are you sure you want to close this form?</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Are you sure you want to close this form?</h3>
                         <div className="flex justify-end gap-4">
                             <button
                                 type="button"
@@ -369,8 +369,8 @@ const AuthForm = ({ onClose }) => {
             {showSuccessDialog && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
                     <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 className="text-xl font-semibold mb-4">Registration Successful!</h3>
-                        <p className="mb-4">Congratulations! You’ve joined Bitspin365. Now, let’s make your experience amazing!</p>
+                        <h3 className="text-xl font-semibold mb-4 text-gray-800">Registration Successful!</h3>
+                        <p className="mb-4 text-gray-600">Congratulations! You’ve joined Bitspin365. Now, let’s make your experience amazing!</p>
                         <button
                             type="button"
                             onClick={() => setShowSuccessDialog(false)}
@@ -381,6 +381,7 @@ const AuthForm = ({ onClose }) => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

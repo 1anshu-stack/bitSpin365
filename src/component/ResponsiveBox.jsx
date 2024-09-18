@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BitSpin365_logo from '../assets/BitSpin365_logo.png';
+import AuthForm from '../AuthForm'; // Adjust path as needed
 
 const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handleCurrencyChange }) => {
+    const [showAuthForm, setShowAuthForm] = useState(false);
+
+    const handleOpenAuthForm = () => {
+        setShowAuthForm(true);
+    };
+
+    const handleCloseAuthForm = () => {
+        setShowAuthForm(false);
+    };
+
     return (
         <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center">
             <div className="bg-gradient-to-br from-yellow-300 via-pink-200 to-white text-gray-800 rounded-xl shadow-2xl flex flex-col md:flex-row max-w-2xl h-auto md:h-100 p-4 md:p-6 m-8 md:m-10 space-y-4 md:space-y-2 md:space-x-0">
@@ -37,12 +48,17 @@ const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handl
                     </div>
                     <button
                         className="bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-400 transition duration-300 w-50"
-                        onClick={openSignup}
+                        onClick={handleOpenAuthForm}
                     >
                         Start Playing
                     </button>
                 </div>
             </div>
+
+            {/* Render AuthForm Component */}
+            {showAuthForm && (
+                <AuthForm onClose={handleCloseAuthForm} />
+            )}
         </div>
     );
 };
