@@ -3,12 +3,13 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from '../APIs/Api';
 
 const ADD_DETAILS_MUTATION = async (args) => {
     const { details, context } = args;
     console.log('Details:', details);
     console.log('Context:', context);
-  const response = await axios.post('http://localhost:8080/api/registration/add-details', details, {
+  const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, details, {
     headers: context.headers,
   });
   return response.data;

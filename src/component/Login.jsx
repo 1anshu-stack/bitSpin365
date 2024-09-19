@@ -3,10 +3,11 @@ import BigWin from '../assets/BigWin.jpg';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../APIs/Api'
 
 // Define the mutation functions directly in the component file
 const login = async ({ email, password }) => {
-  const response = await axios.post('http://localhost:8080/casino/login', { email, password });
+  const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password });
   return response.data;
 };
 

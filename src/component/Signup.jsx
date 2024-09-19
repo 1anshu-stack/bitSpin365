@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import AddDetails from './AddDetails';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { API_ENDPOINTS } from '../APIs/Api';
 
 
 const Signup = ({ onClose }) => {
@@ -101,7 +102,7 @@ const Signup = ({ onClose }) => {
     //mutation hook for signup using mutationFn explicitly
     const mutation = useMutation({
         mutationFn: async (data) => {
-            const response = await axios.post('http://localhost:8080/api/registration/create', data);
+            const response = await axios.post(API_ENDPOINTS.SIGNUP, data);
             return response.data;
         },
         onSuccess: (data) => {
