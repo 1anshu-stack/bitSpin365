@@ -25,6 +25,7 @@ const AuthForm = ({ onClose }) => {
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false); // Add state for success dialog
+    const [isForgotPassword, setIsForgotPassword] = useState(false); // New state for Forgot Password
 
     const modalRef = useRef(null);
 
@@ -45,6 +46,17 @@ const AuthForm = ({ onClose }) => {
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const validatePassword = (password) => password.length >= 8;
+
+    const validateDOB = (dob) => {
+        const dobDate = new Date(dob);
+        const today = new Date();
+        const age = today.getFullYear() - dobDate.getFullYear();
+        const monthDifference = today.getMonth() - dobDate.getMonth();
+        const dayDifference = today.getDate() - dobDate.getDate();
+        return age > 18 || (age === 18 && (monthDifference > 0 || (monthDifference === 0 && dayDifference >= 0)));
+    };
+
+    const validatePhone = (phone) => /^\d{10}$/.test(phone);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -128,7 +140,7 @@ const AuthForm = ({ onClose }) => {
                     {!isRegistered ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center mb-6">
-                                {isSignup ? 'Sign Up' : 'Log In'}
+                                {isSignup ? 'Sign Up' : isForgotPassword ? 'Forgot Password' : 'Log In'}
                             </h2>
 
                             {/* Email Input */}
@@ -147,28 +159,43 @@ const AuthForm = ({ onClose }) => {
                                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                             </div>
 
-                            {/* Password Input */}
-                            <div className="relative mb-4">
-                                <FaLock className="absolute top-4 left-3 text-gray-500" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="Enter your password"
-                                    className={`w-full p-3 pl-10 border ${
-                                        errors.password ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={togglePasswordVisibility}
-                                    className="absolute top-3 right-3 text-gray-500"
-                                >
-                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                                </button>
-                                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                            </div>
+                            {/* Password Input - Only show if not in Forgot Password mode */}
+                            {!isForgotPassword && (
+                                <div className="relative mb-4">
+                                    <FaLock className="absolute top-4 left-3 text-gray-500" />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        placeholder="Enter your password"
+                                        className={`w-full p-3 pl-10 border ${
+                                            errors.password ? 'border-red-500' : 'border-gray-300'
+                                        } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={togglePasswordVisibility}
+                                        className="absolute top-3 right-3 text-gray-500"
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                    {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                                </div>
+                            )}
+
+                            {/* Forgot Password Link - Only show in Login mode */}
+                            {!isSignup && !isForgotPassword && (
+                                <div className="text-right">
+                                    <button
+                                        type="button"
+                                        className="text-sm text-blue-500 hover:underline"
+                                        onClick={() => setIsForgotPassword(true)}
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                </div>
+                            )}
 
                             {/* T&C and Age Checkboxes */}
                             {isSignup && (
@@ -207,18 +234,21 @@ const AuthForm = ({ onClose }) => {
                                 type="submit"
                                 className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
                             >
-                                {isSignup ? 'Sign Up' : 'Log In'}
+                                {isSignup ? 'Sign Up' : isForgotPassword ? 'Send Reset Link' : 'Log In'}
                             </button>
 
-                            <p className="text-center text-gray-600">
+                            <div className="text-center mt-4">
                                 <button
                                     type="button"
-                                    onClick={() => setIsSignup(!isSignup)}
-                                    className="text-gray-600 hover:underline"
+                                    className="text-sm text-blue-500 hover:underline"
+                                    onClick={() => {
+                                        setIsSignup(!isSignup);
+                                        setIsForgotPassword(false); // Reset Forgot Password mode
+                                    }}
                                 >
-                                    {isSignup ? 'Already have an account? Log In' : 'Need an account? Sign Up'}
+                                    {isSignup ? 'Already have an account? Log In' : 'New user? Sign Up here'}
                                 </button>
-                            </p>
+                            </div>
                         </form>
                     ) : (
                         <form className="space-y-2">
@@ -248,15 +278,20 @@ const AuthForm = ({ onClose }) => {
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-                            <div className="relative mb-4">
+                            <div className="mb-4">
+                                <label htmlFor="dob" className="block text-gray-600 font-bold mb-1"></label>
                                 <input
                                     type="date"
                                     name="dob"
                                     value={formData.dob}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
+                                    onChange={validateDOB}
+                                    className={`w-full p-3 border ${
+                                        errors.dob ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
+                                {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
                             </div>
+
                             <div className="relative mb-4">
                                 <input
                                     type="text"
@@ -297,26 +332,32 @@ const AuthForm = ({ onClose }) => {
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-                            <div className="relative mb-4">
+                            <div className="mb-4">
                                 <input
                                     type="text"
                                     name="phone"
                                     value={formData.phone}
-                                    onChange={handleChange}
+                                    onChange={validatePhone}
                                     placeholder="Enter your phone number"
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
+                                    className={`w-full p-3 border ${
+                                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
+                                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                             </div>
-                            <div className="relative mb-4">
-                                <input
-                                    type="text"
+                            <div className="mb-4">
+                                <select
                                     name="securityQuestion"
                                     value={formData.securityQuestion}
                                     onChange={handleChange}
-                                    placeholder="Enter a security question"
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
-                                />
+                                >
+                                    <option value="pet">What was the name of your first pet?</option>
+                                    <option value="mother">What is your mother's maiden name?</option>
+                                    <option value="city">What city were you born in?</option>
+                                </select>
                             </div>
+
                             <div className="relative mb-4">
                                 <input
                                     type="text"
@@ -340,25 +381,24 @@ const AuthForm = ({ onClose }) => {
                 </div>
             </div>
 
+
             {/* Confirmation Dialog */}
             {showConfirmationDialog && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Are you sure you want to close this form?</h3>
-                        <div className="flex justify-end gap-4">
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-60">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                        <p className="text-gray-700 mb-4">Are you sure you want to close the form?</p>
+                        <div className="flex justify-end space-x-4">
                             <button
-                                type="button"
-                                onClick={confirmClose}
-                                className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
+                                onClick={cancelClose}
+                                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
                             >
-                                Yes
+                                Cancel
                             </button>
                             <button
-                                type="button"
-                                onClick={cancelClose}
-                                className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                                onClick={confirmClose}
+                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                             >
-                                No
+                                Close
                             </button>
                         </div>
                     </div>
@@ -367,21 +407,18 @@ const AuthForm = ({ onClose }) => {
 
             {/* Success Dialog */}
             {showSuccessDialog && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
-                    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-800">Registration Successful!</h3>
-                        <p className="mb-4 text-gray-600">Congratulations! You’ve joined Bitspin365. Now, let’s make your experience amazing!</p>
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-60">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                        <p className="text-gray-700 mb-4">Registration complete! You may now log in.</p>
                         <button
-                            type="button"
-                            onClick={() => setShowSuccessDialog(false)}
-                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                            onClick={confirmClose}
+                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                         >
                             OK
                         </button>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

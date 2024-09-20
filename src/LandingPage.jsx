@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import img from './assets/mainpagepic.png';
 import GameCarousel from './component/GameCarousel.jsx';
 import JackpotSection from './component/JackpotSection.jsx';
 import FeedbackCard from './component/FeedbackCard.jsx';
 import ResponsiveBox from "./component/ResponsiveBox.jsx";
+import AuthForm from './AuthForm.jsx'; // Import AuthForm
 
 const LandingPage = () => {
-
     const [activeCard, setActiveCard] = useState(null);
     const [animationPaused, setAnimationPaused] = useState(false);
     const [amount, setAmount] = useState('');
     const [currency, setCurrency] = useState('USD');
-
+    const [showAuthForm, setShowAuthForm] = useState(false); // State for dialog visibility
 
     const handleCardClick = (index) => {
         setActiveCard(index);
@@ -28,6 +28,9 @@ const LandingPage = () => {
 
     const handleAmountChange = (e) => setAmount(e.target.value);
     const handleCurrencyChange = (e) => setCurrency(e.target.value);
+    const handleCloseAuthForm = () => {
+        setShowAuthForm(false);
+    };
 
     const feedbacks = [
         { name: 'Alice', rating: 5, feedback: 'Amazing experience, would highly recommend!' },
@@ -39,6 +42,8 @@ const LandingPage = () => {
         { name: 'John', rating: 4, feedback: 'Everything about this game is top-tier.' },
     ];
 
+    const toggleAuthForm = () => setShowAuthForm(!showAuthForm);
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
             {/* Hero Section */}
@@ -47,7 +52,7 @@ const LandingPage = () => {
                     <motion.img
                         src={img}
                         alt="image"
-                        className="w-full h-full"
+                        className="w-full h-full object-cover" // Ensure the image covers the area without distortion
                     />
                 </div>
                 Centered ResponsiveBox
@@ -61,34 +66,31 @@ const LandingPage = () => {
                         />
                     </div>
                 </div>
-
             </section>
 
-
-            {/* Other Sections */
-            }
+            {/* Other Sections */}
             <section className="py-5 md:py-10 px-2 md:px-4">
-        <h3 className="text-2xl md:text-3xl font-bold mb-4">Featured Games</h3>
-        <GameCarousel/>
-    </section>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">Featured Games</h3>
+                <GameCarousel />
+            </section>
 
-    <section className="py-5 md:py-5 px-2 md:px-4">
-        <h3 className="text-2xl md:text-3xl font-bold mb-4">Table Games</h3>
-                <GameCarousel/>
+            <section className="py-5 md:py-5 px-2 md:px-4">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">Table Games</h3>
+                <GameCarousel />
             </section>
 
             <section className="py-5 md:py-5 px-2 md:px-4">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">Roulette Games</h3>
-                <GameCarousel/>
+                <GameCarousel />
             </section>
 
-            <div className=" py-5 md:py-25 px-2 md:px-4 text-2xl md:text-3xl font-bold">
-            <JackpotSection/>
+            <div className="py-5 md:py-25 px-2 md:px-4 text-2xl md:text-3xl font-bold">
+                <JackpotSection />
             </div>
 
             <section className="py-5 md:py-30 px-2 md:px-4">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">Live Casino</h3>
-                <GameCarousel/>
+                <GameCarousel />
             </section>
 
             <section className="py-10 md:py-15 px-4 md:px-6" onClick={handleClickOutside}>
@@ -97,7 +99,7 @@ const LandingPage = () => {
                     {!animationPaused && (
                         <motion.div
                             className="flex space-x-6 py-4 absolute top-0"
-                            animate={{x: ['0%', '-100%']}}
+                            animate={{ x: ['0%', '-100%'] }}
                             transition={{
                                 repeat: Infinity,
                                 duration: 20,
@@ -108,9 +110,9 @@ const LandingPage = () => {
                                 <motion.div
                                     key={index}
                                     className="feedback-card flex-shrink-0 w-80"
-                                    initial={{opacity: 0, x: 100}}
-                                    animate={{opacity: 1, x: 0}}
-                                    exit={{opacity: 0, x: -100}}
+                                    initial={{ opacity: 0, x: 100 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -100 }}
                                     transition={{
                                         duration: 0.5,
                                         delay: index * 0.1,
@@ -118,7 +120,7 @@ const LandingPage = () => {
                                         stiffness: 300,
                                         damping: 20
                                     }}
-                                    whileHover={{scale: 1.08, y: -8}}
+                                    whileHover={{ scale: 1.08, y: -8 }}
                                 >
                                     <FeedbackCard
                                         {...feedback}
@@ -143,8 +145,7 @@ const LandingPage = () => {
             </section>
 
             {/* Let's Get Started Section */}
-            <section
-                className="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 py-10 md:py-16 px-6 md:px-8 text-center">
+            <section className="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 py-10 md:py-16 px-6 md:px-8 text-center">
                 <div className="container mx-auto">
                     <h3 className="text-3xl md:text-4xl font-bold text-yellow-400">
                         Let's Get Started
@@ -152,6 +153,12 @@ const LandingPage = () => {
                     <p className="text-md md:text-lg text-gray-300 mt-4">
                         Play the spins for a chance to win one of the BitSpin365 Jackpots!
                     </p>
+                    <button
+                        onClick={toggleAuthForm}
+                        className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                        Signup Now!
+                    </button>
                 </div>
             </section>
 
@@ -159,7 +166,7 @@ const LandingPage = () => {
                 <h3 className="text-2xl md:text-3xl font-bold mb-8">Why Choose Us?</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-gray-800 rounded-lg p-4 md:p-6 hover:bg-gray-700">
-                        <h4 className=" text-lg md:text-xl font-bold mb-2">Secure Payments</h4>
+                        <h4 className="text-lg md:text-xl font-bold mb-2">Secure Payments</h4>
                         <p>We guarantee fast, secure transactions, giving you peace of mind with every bet.</p>
                     </div>
                     <div className="bg-gray-800 rounded-lg p-4 md:p-6 hover:bg-gray-700">
@@ -177,6 +184,13 @@ const LandingPage = () => {
                 <p>&copy; 2024 BitSpin365</p>
                 <p>All rights reserved.</p>
             </footer>
+
+            {/* AuthForm Dialog */}
+            {showAuthForm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+                    <AuthForm onClose={handleCloseAuthForm} />
+                </div>
+            )}
         </div>
     );
 };
