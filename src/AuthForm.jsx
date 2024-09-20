@@ -19,6 +19,35 @@ const AuthForm = ({ onClose }) => {
         is18OrAbove: false,
         agreeToTerms: false,
     });
+
+    const validateRequiredFields = () => {
+        const requiredFields = [
+            formData.firstName,
+            formData.lastName,
+            formData.dob,
+            formData.address,
+            formData.city,
+            formData.country,
+            formData.postcode,
+            formData.phone,
+            formData.securityQuestion,
+            formData.answer,
+        ];
+
+        return requiredFields.every(field => field.trim() !== '');
+    };
+
+    const completeRegistration = () => {
+        if (validateRequiredFields()) {
+            setShowSuccessDialog(true);
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                required: 'Please fill in all required fields.',
+            }));
+        }
+    };
+
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [isSignup, setIsSignup] = useState(true); // Control the form mode
@@ -135,9 +164,6 @@ const AuthForm = ({ onClose }) => {
 
     const cancelClose = () => setShowConfirmationDialog(false);
 
-    const completeRegistration = () => {
-        setShowSuccessDialog(true); // Show success dialog
-    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -430,12 +456,10 @@ const AuthForm = ({ onClose }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-60">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-96">
                         <p className="text-gray-700 mb-4">Registration complete! You may now log in.</p>
-                        <button
-                            onClick={confirmClose}
-                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                        >
-                            OK
+                        <button onClick={completeRegistration} className="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">
+                            Continue
                         </button>
+                        {errors.required && <p className="text-red-500 text-sm mt-1">{errors.required}</p>}
                     </div>
                 </div>
             )}
