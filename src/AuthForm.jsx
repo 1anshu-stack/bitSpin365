@@ -64,6 +64,31 @@ const AuthForm = ({ onClose }) => {
             ...prevState,
             [name]: type === 'checkbox' ? checked : value,
         }));
+
+        // Validate fields on change
+        if (name === 'phone' && !validatePhone(value)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                phone: 'Phone number must be exactly 10 digits',
+            }));
+        } else if (name === 'phone') {
+            setErrors((prevErrors) => {
+                const { phone, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+        if (name === 'dob' && !validateDOB(value)) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                dob: 'You must be at least 18 years old',
+            }));
+        } else if (name === 'dob') {
+            setErrors((prevErrors) => {
+                const { dob, ...rest } = prevErrors;
+                return rest;
+            });
+        }
     };
 
     const handleSubmit = (e) => {
@@ -278,16 +303,13 @@ const AuthForm = ({ onClose }) => {
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label htmlFor="dob" className="block text-gray-600 font-bold mb-1"></label>
+                            <div className="relative mb-4">
                                 <input
                                     type="date"
                                     name="dob"
                                     value={formData.dob}
-                                    onChange={validateDOB}
-                                    className={`w-full p-3 border ${
-                                        errors.dob ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                                    onChange={handleChange}
+                                    className={`w-full p-3 border ${errors.dob ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                                 />
                                 {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
                             </div>
@@ -332,19 +354,17 @@ const AuthForm = ({ onClose }) => {
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <input
-                                    type="text"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={validatePhone}
-                                    placeholder="Enter your phone number"
-                                    className={`w-full p-3 border ${
-                                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
-                                />
-                                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                            </div>
+                            <div className="relative mb-4">
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="Enter your phone number"
+                                className={`w-full p-3 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
+                            />
+                            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                        </div>
                             <div className="mb-4">
                                 <select
                                     name="securityQuestion"
