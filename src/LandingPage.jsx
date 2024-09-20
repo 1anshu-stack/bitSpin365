@@ -52,7 +52,7 @@ const LandingPage = () => {
                     <motion.img
                         src={img}
                         alt="image"
-                        className="w-full h-full object-cover" // Ensure the image covers the area without distortion
+                        className="w-full h-full" // Ensure the image covers the area without distortion
                     />
                 </div>
                 Centered ResponsiveBox

@@ -146,12 +146,12 @@ const AuthForm = ({ onClose }) => {
         if (Object.keys(newErrors).length === 0) {
             if (isSignup) {
                 setIsRegistered(true); // Show registration form
+                completeRegistration(); // Call completeRegistration to show the success dialog
             } else {
                 console.log('Login form submitted:', formData);
             }
         }
     };
-
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const handleClose = () => setShowConfirmationDialog(true);
@@ -456,7 +456,7 @@ const AuthForm = ({ onClose }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-60">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-96">
                         <p className="text-gray-700 mb-4">Registration complete! You may now log in.</p>
-                        <button onClick={completeRegistration} className="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">
+                        <button onClick={()=> setShowSuccessDialog(true)} className="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">
                             Continue
                         </button>
                         {errors.required && <p className="text-red-500 text-sm mt-1">{errors.required}</p>}
