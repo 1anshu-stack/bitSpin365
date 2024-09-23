@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import Bonus from '../assets/Bonus.jpg'; // Example background image path
+import Bonus from '../assets/Bonus.jpg';
 import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../APIs/Api';
+import Joi from 'joi';
 
-const ADD_DETAILS_MUTATION = async (args) => {
-    const { details, context } = args;
-    console.log('Details:', details);
-    console.log('Context:', context);
-  const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, details, {
+const validationSchema = Joi.object({
+  fname: Joi.string().required(),
+  lname: Joi.string().required(),
+  password: Joi.string().required(),
+  birthDate: Joi.string().required(),
+  address: Joi.string().required(),
+  city: Joi.string().required(),
+  country: Joi.string().required(),
+  postcode: Joi.string().required(),
+  phone: Joi.string().required(),
+  question: Joi.string().required(),
+  answer: Joi.string().required(),
+});
+
+const ADD_DETAILS_MUTATION = async ({ details, context }) => {
+  const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, { details }, {
+    headers: context.headers,
+  });
+  return response.data;
+};
+
+const FINALIZE_REGISTRATION_MUTATION = async ({ details, bannerID, tracker, context }) => {
+  const response = await axios.post(API_ENDPOINTS.FINALIZE_REGISTRATION, { details, bannerID, tracker }, {
     headers: context.headers,
   });
   return response.data;
@@ -20,7 +39,7 @@ const AddDetails = () => {
   const [details, setDetails] = useState({
     fname: '',
     lname: '',
-    password:'',
+    password: '',
     birthDate: '',
     address: '',
     city: '',
@@ -32,92 +51,65 @@ const AddDetails = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [bannerId, setBannerId] = useState('');
+  const [tracker, setTracker] = useState('');
+  const [showBannerTracker, setShowBannerTracker] = useState(false);
 
-  const { mutate, isLoading, isError } = useMutation({
-      mutationFn: ADD_DETAILS_MUTATION,
+  const { mutate: addDetailsMutate, isLoading, isError, error } = useMutation({
+    mutationFn: ADD_DETAILS_MUTATION,
+  });
+  const { mutate: finalizeRegistrationMutate } = useMutation({
+      mutationFn: FINALIZE_REGISTRATION_MUTATION,
   });
 
   const navigate = useNavigate();
-
-  const validateForm = () => {
-      const errors = {};
-
-          if (!details.fname) {
-            errors.fname = 'Please enter your first name';
-          }
-
-          if (!details.lname) {
-            errors.lname = 'Please enter your last name';
-          }
-          if (!details.password){
-              errors.password = 'please enter your password';
-          }
-
-          if (!details.birthDate) {
-            errors.birthDate = 'Please enter your date of birth';
-          }
-
-          if (!details.address) {
-            errors.address = 'Please enter your address';
-          }
-
-          if (!details.city) {
-            errors.city = 'Please enter your city';
-          }
-
-          if (!details.country) {
-            errors.country = 'Please enter your country';
-          }
-
-          if (!details.postcode) {
-            errors.postcode = 'Please enter your postcode';
-          }
-
-          if (!details.phone) {
-            errors.phone = 'Please enter your phone number';
-          }
-
-          if (!details.question) {
-            errors.question = 'Please select a security question';
-          }
-
-          if (!details.answer) {
-            errors.answer = 'Please enter an answer';
-          }
-      return errors;
+  const [validationErrors, setValidationErrors] = useState({});
+  const handleFinalizeRegistration = async () => {
+      //call finalize registration mutation
+      finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker, context: { headers: { Authorization: `Bearer ${token}`} } }, {
+          onSuccess: (data) => {
+              console.log('registration finalized successfully:', data);
+              navigate('/login', { replace: true });
+              alert('registered successfully!');
+          },
+          onError: (error) => {
+              console.log('error finalizing registration:', error);
+              alert('Error finalizing registration. Please try again!');
+          },
+      });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = validateForm();
+    const validationErrors = validationSchema.validate(details, { abortEarly: false });
 
-    setErrors(errors);
+    if (validationErrors.error) {
+      setErrors(validationErrors.error.details);
+      return;
+    }
 
-    if (Object.keys(errors).length === 0 && token) {
-        console.log('Details:', details);
-        console.log('Token:', token);
-        try{
-            mutate({ details, context: { headers: { Authorization: `Bearer ${token}`} } }, {
-                onSuccess: (data) => {
-                    console.log('Account created successfully:', data);
-                    navigate('/login', { replace: true });
-                    alert('Details added successfully!');
-                },
-                onError: (error) => {
-                    console.error('error adding your details:', error);
-                    alert('Error adding your details. Please try again!');
-                },
-            });
-        }catch(error){
-            console.log('error adding your details:', error);
-            alert('Error creating account. Please try again!');
-        }
+    if (token) {
+      try {
+        await addDetailsMutate({ details, context: { headers: { Authorization: `Bearer ${token}`} } }, {
+          onSuccess: (data) => {
+            console.log('Details added successfully!', data);
+            setShowBannerTracker(true);
+            handleFinalizeRegistration();
+          },
+          onError: (error) => {
+              console.error('Error adding your details:', error);
+              alert('Error adding your details. Please try again!');
+          },
+        });
+      }catch (error) {
+          console.log('Error adding your details:', error);
+          alert('Error creating account. Please try again!');
+      }
     }else {
-        console.log('token id not defined');
+        console.log('Token is not defined');
     }
   };
-
   return (
     // Form JSX code here
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -139,7 +131,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, fname: e.target.value })}
                     placeholder="First Name"
                     className={`w-full p-3 border ${
-                      errors.fname ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.fname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -151,7 +143,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, lname: e.target.value })}
                     placeholder="Last Name"
                     className={`w-full p-3 border ${
-                      errors.lname ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.lname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -163,7 +155,7 @@ const AddDetails = () => {
                        onChange={(e) => setDetails({ ...details, password: e.target.value })}
                        placeholder="Password"
                        className={`w-full p-3 border ${
-                           errors.password ? 'border-red-500' : 'border-gray-300'
+                           validationErrors.password ? 'border-red-500' : 'border-gray-300'
                        } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                     />
                 </div>
@@ -175,7 +167,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, birthDate: e.target.value })}
                     placeholder="Date of Birth"
                     className={`w-full p-3 border ${
-                      errors.birthDate ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.birthDate ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -187,7 +179,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, address: e.target.value })}
                     placeholder="Address"
                     className={`w-full p-3 border ${
-                      errors.address ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.address ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -199,7 +191,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, city: e.target.value })}
                     placeholder="City"
                     className={`w-full p-3 border ${
-                      errors.city ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.city ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -211,7 +203,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, country: e.target.value })}
                     placeholder="Country"
                     className={`w-full p-3 border ${
-                      errors.country ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.country ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -223,7 +215,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, postcode: e.target.value })}
                     placeholder="Postcode"
                     className={`w-full p-3 border ${
-                      errors.postcode ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.postcode ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -235,7 +227,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, phone: e.target.value })}
                     placeholder="Phone Number"
                     className={`w-full p-3 border ${
-                      errors.phone ? 'border-red-500' : 'border-gray-300'
+                      validationErrors.phone ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>
@@ -247,7 +239,7 @@ const AddDetails = () => {
                         setDetails({ ...details, question: e.target.value })
                       }
                       className={`w-full p-3 border ${
-                        errors.question ? 'border-red-500' : 'border-gray-300'
+                        validationErrors.question ? 'border-red-500' : 'border-gray-300'
                       } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                     >
                       <option value="">Select Security Question</option>
@@ -273,20 +265,45 @@ const AddDetails = () => {
                           onChange={(e) => setDetails({ ...details, answer: e.target.value })}
                           placeholder="Answer"
                           className={`w-full p-3 border ${
-                            errors.answer ? 'border-red-500' : 'border-gray-300'
+                            validationErrors.answer ? 'border-red-500' : 'border-gray-300'
                           } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                         />
                       </div>
+                      {showBannerTracker && (
+                        <div>
+                          <div className="relative mb-4">
+                            <input
+                              type="number"
+                              name="bannerId"
+                              value={bannerId}
+                              onChange={(e) => setBannerId(e.target.value)}
+                              placeholder="Banner ID"
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
+                            />
+                          </div>
+                          <div className="relative mb-4">
+                            <input
+                              type="text"
+                              name="tracker"
+                              value={tracker}
+                              onChange={(e) => setTracker(e.target.value)}
+                              placeholder="Tracker"
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-500"
+                            />
+                          </div>
+                        </div>
+                      )}
                 <button
-                  type="submit"
+                  type={showBannerTracker ? 'button' : 'submit'}
+                  onClick={showBannerTracker ? handleFinalizeRegistration : null}
                   className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors"
                 >
-                  Save Changes
+                  {showBannerTracker ? 'Finalize Registration' : 'Save Changes'}
                 </button>
               </form>
             </div>
           </div>
-        </div>
+    </div>
   );
 };
 

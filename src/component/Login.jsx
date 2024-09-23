@@ -6,8 +6,12 @@ import axios from 'axios';
 import { API_ENDPOINTS } from '../APIs/Api'
 
 // Define the mutation functions directly in the component file
-const login = async ({ email, password }) => {
-  const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password });
+const login = async ({ email, password , token}) => {
+  const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password}, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+      },
+  });
   return response.data;
 };
 
@@ -23,6 +27,7 @@ const Login = ({ onClose }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [token, setToken] = useState(sessionStorage.getItem('token') || '');
 
   const modalRef = useRef(null);
 
@@ -79,7 +84,7 @@ const Login = ({ onClose }) => {
     if (isReset) {
       resetPasswordMutation.mutate(formData.email);
     } else {
-      loginMutation.mutate(formData);
+      loginMutation.mutate({...formData, token});
     }
   };
 
