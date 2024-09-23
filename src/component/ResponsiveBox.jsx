@@ -26,7 +26,9 @@ const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handl
                 </div>
                 {/* Form Section */}
                 <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-                    <h2 className="text-lg md:text-2xl font-bold text-center md:text-left">Welcome to the Ultimate Gaming Experience!</h2>
+                    <h2 className="text-lg md:text-2xl font-bold text-center md:text-left mb-2 md:mb-4">
+                        Welcome to the Ultimate Gaming Experience!
+                    </h2>
                     <p className="text-center md:text-left">Enter the amount and select your currency to start playing!</p>
                     <div className="w-full space-y-4">
                         <input
