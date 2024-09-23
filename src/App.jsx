@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Header from './component/Header'; // Import the Header component
-import LandingPage from './LandingPage.jsx'; // Import the LandingPage component
+import LandingPage from './pages/LandingPage.jsx'; // Import the LandingPage component
 
 
 function App() {
