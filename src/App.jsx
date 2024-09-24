@@ -1,16 +1,17 @@
-import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Header from './component/Header'; // Import the Header component
-import LandingPage from './pages/LandingPage.jsx'; // Import the LandingPage component
-
+// import Header from './component/Header'; //
+// import LandingPage from './LandingPage.jsx';
+import HeaderLogin from "./component/Login/HeaderLogin.jsx";
+import Dashboard from "./component/Login/Dashboard.jsx";
+// import Header from "./component/Header.jsx";
 
 function App() {
     return (
         <Router>
             <div className="app">
-                <Header/> {/* Render the Header component */}
+                <HeaderLogin/> {/* Render the Header component */}
                 <Routes>
-                    <Route path="/" element={<LandingPage/>}/> {/* Landing Page */}
+                    <Route path="/" element={<Dashboard/>}/> {/* Landing Page */}
                 </Routes>
             </div>
         </Router>
@@ -20,17 +21,3 @@ function App() {
 export default App;
 
 
-// import React from 'react';
-// import Header from './component/Header'; // Import the Header component
-// import LandingPage from './component/LandingPage'; // Import the LandingPage component
-//
-// function App() {
-//     return (
-//         <div className="app">
-//             <Header /> {/* Render the Header component */}
-//             <LandingPage /> {/* Render the LandingPage component below the Header */}
-//         </div>
-//     );
-// }
-//
-// export default App;

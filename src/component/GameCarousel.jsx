@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import GameCard from './GameCard';
 import image1 from '../assets/card1.jpg';
-import image2 from '../assets/card2.jpg'; // More images
-
+import image2 from '../assets/card2.jpg';
 const GameCarousel = () => {
     const [scrollX, setScrollX] = useState(0); // Keeps track of the scroll position
     const cardWidth = 240; // Adjust card width including padding and margin
