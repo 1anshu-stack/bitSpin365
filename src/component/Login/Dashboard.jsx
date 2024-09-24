@@ -14,7 +14,8 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
-            <section className="flex flex-col items-center justify-center text-center py-10 relative bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 h-screen">
+            <section
+                className="flex flex-col items-center justify-center text-center py-10 relative bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 h-screen">
                 <div className="absolute inset-0 flex items-center justify-center">
                     <DepositBox
                         amount={amount}
@@ -22,16 +23,8 @@ const Dashboard = () => {
                         currency={currency}
                         handleCurrencyChange={handleCurrencyChange}
                     />
-                </div>
-                <div className="absolute bottom-0 left-0 right-20 mb-8"> {/* Add this wrapper div */}
-                    <section className="flex justify-end space-x-6 mt-60 overflow-x-auto">
-                        <InfoBox label="Average Cash Out Time" value="7m 31s"/>
-                        <InfoBox label="Biggest Win" value="$174,100.00"/>
-                        <InfoBox label="Top Rated 24/7 Support" value="★★★★★"/>
-                        <InfoBox label="New Games" value="19 New Games"/>
-                    </section>
-                </div>
 
+                </div>
 
                 {/* Navbar positioned relative to this section */}
                 <nav className="bg-white border-gray-200 dark:bg-gray-900 absolute bottom-0 left-0 right-0">

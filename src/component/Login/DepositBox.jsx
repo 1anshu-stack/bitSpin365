@@ -90,6 +90,13 @@ const DepositBox = () => {
                 PLAY WITH 0.001 BTC + 180 FREE SPINS
             </button>
 
+            <p
+                className="text-sm cursor-pointer underline hover:text-yellow-400 transition-colors"
+                onClick={handleBonusCodeToggle}
+            >
+                {isBonusCodeVisible ? 'No bonus code' : 'I have a bonus code'}
+            </p>
+
             {/* Bonus code input section */}
             {isBonusCodeVisible && (
                 <div className="mt-4 relative">
@@ -110,17 +117,9 @@ const DepositBox = () => {
                 </div>
             )}
 
-            {/* I have a bonus code / No bonus code link */}
-            <p
-                className="text-sm cursor-pointer underline hover:text-yellow-400 transition-colors mt-4"
-                onClick={handleBonusCodeToggle}
-            >
-                {isBonusCodeVisible ? 'No bonus code' : 'I have a bonus code'}
-            </p>
-
             {/* Info box that appears on clicking the info icon, aligned to the right of the bonus */}
             {isInfoVisible && (
-                <div className="absolute top-20 right-[-310px] bg-white text-black p-4 rounded-lg shadow-lg w-64">
+                <div className="absolute top-0 right-[-320px] bg-white text-black p-4 rounded-lg shadow-lg w-64">
                     <div className="flex justify-between items-center mb-2">
                         <h3 className="font-bold">Bonus Information</h3>
                         <AiOutlineClose
