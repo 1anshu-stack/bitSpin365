@@ -1,18 +1,18 @@
-// import { useState } from 'react';
+ import { useState } from 'react';
 import GameCarousel from '../GameCarousel.jsx';
 import JackpotSection from '../JackpotSection.jsx';
-// import DepositBox from "./DepositBox.jsx";
+import DepositBox from "./DepositBox.jsx";
 import ScrollableInfoSection from "./ScrollableInfoSection.jsx";
 import PromoCard from "./PromoCard.jsx";
 import image1 from '../../assets/promocard2.png';
 import { FaStar, FaDollarSign, FaTrophy, FaCoins, FaRocket } from 'react-icons/fa';
 
 const Dashboard = () => {
-    // const [amount, setAmount] = useState('');
-    // const [currency, setCurrency] = useState('USD');
-    //
-    // const handleAmountChange = (e) => setAmount(e.target.value);
-    // const handleCurrencyChange = (e) => setCurrency(e.target.value);
+    const [amount, setAmount] = useState('');
+    const [currency, setCurrency] = useState('USD');
+
+    const handleAmountChange = (e) => setAmount(e.target.value);
+    const handleCurrencyChange = (e) => setCurrency(e.target.value);
     const flipContent1 = [
         { text: "1st deposit: 100% up to 1 BTC", icon: <FaDollarSign className="text-green-500" /> },
         { text: "+ 180 Free Spins", icon: <FaCoins className="text-yellow-500" /> },
@@ -48,15 +48,15 @@ const Dashboard = () => {
                 {/* Welcome Message */}
                 <h1 className="text-4xl font-bold text-white mb-8">Welcome to Your Dashboard</h1>
 
-                {/*/!* Deposit Box *!/*/}
-                {/*<div className="flex flex-col items-center mb-8">*/}
-                {/*    <DepositBox*/}
-                {/*        amount={amount}*/}
-                {/*        handleAmountChange={handleAmountChange}*/}
-                {/*        currency={currency}*/}
-                {/*        handleCurrencyChange={handleCurrencyChange}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                {/* Deposit Box */}
+                <div className="flex flex-col items-center mb-8">
+                    <DepositBox
+                        amount={amount}
+                        handleAmountChange={handleAmountChange}
+                        currency={currency}
+                        handleCurrencyChange={handleCurrencyChange}
+                    />
+                </div>
                 <ScrollableInfoSection/>
                 {/* Navbar at the Bottom */}
                 <nav className="bg-white border-gray-200 dark:bg-gray-900 absolute bottom-0 left-0 right-0">
