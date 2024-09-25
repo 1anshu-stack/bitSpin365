@@ -45,19 +45,23 @@ const DepositBox = () => {
 
             <div className="flex justify-center space-x-2 mb-6">
                 {/* Currency buttons with icons */}
-                <button className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
-                    <FaBitcoin />
+                <button
+                    className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
+                    <FaBitcoin/>
                     <span>BTC</span>
                 </button>
-                <button className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
-                    <FaDollarSign />
+                <button
+                    className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
+                    <FaDollarSign/>
                     <span>USD</span>
                 </button>
-                <button className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
-                    <FaEthereum />
+                <button
+                    className="bg-purple-500 text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
+                    <FaEthereum/>
                     <span>ETH</span>
                 </button>
-                <button className="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
+                <button
+                    className="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500">
                     More
                 </button>
             </div>
@@ -66,7 +70,7 @@ const DepositBox = () => {
             <div className="bg-gray-800 rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">
-                        <FaGift className="text-yellow-400 text-xl" />
+                        <FaGift className="text-yellow-400 text-xl"/>
                         <p className="text-lg">First Deposit Bonus</p>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -86,16 +90,11 @@ const DepositBox = () => {
                 </div>
             </div>
 
-            <button className="bg-gradient-to-r from-yellow-400 to-yellow-600 py-3 px-4 w-full rounded-lg font-bold text-black mb-4 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500 transform hover:scale-105">
+            <button
+                className="bg-gradient-to-r from-yellow-400 to-yellow-600 py-3 px-4 w-full rounded-lg font-bold text-black mb-4 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500 transform hover:scale-105">
                 PLAY WITH 0.001 BTC + 180 FREE SPINS
             </button>
 
-            <p
-                className="text-sm cursor-pointer underline hover:text-yellow-400 transition-colors"
-                onClick={handleBonusCodeToggle}
-            >
-                {isBonusCodeVisible ? 'No bonus code' : 'I have a bonus code'}
-            </p>
 
             {/* Bonus code input section */}
             {isBonusCodeVisible && (
@@ -116,7 +115,12 @@ const DepositBox = () => {
                     </div>
                 </div>
             )}
-
+            <p
+                className="text-sm cursor-pointer underline hover:text-yellow-400 transition-colors"
+                onClick={handleBonusCodeToggle}
+            >
+                {isBonusCodeVisible ? 'No bonus code' : 'I have a bonus code'}
+            </p>
             {/* Info box that appears on clicking the info icon, aligned to the right of the bonus */}
             {isInfoVisible && (
                 <div className="absolute top-0 right-[-320px] bg-white text-black p-4 rounded-lg shadow-lg w-64">

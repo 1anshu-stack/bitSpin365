@@ -1,4 +1,3 @@
-
 const InfoBox = ({ label, value }) => {
     return (
         <div className="bg-white bg-opacity-50 text-black text-center rounded-lg p-4 m-2 w-40">
