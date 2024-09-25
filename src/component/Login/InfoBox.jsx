@@ -8,3 +8,6 @@ const InfoBox = ({ label, value }) => {
 };
 
 export default InfoBox;
+
+
+

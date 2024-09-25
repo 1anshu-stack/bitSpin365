@@ -4,7 +4,8 @@ import JackpotSection from '../JackpotSection.jsx';
 // import DepositBox from "./DepositBox.jsx";
 import ScrollableInfoSection from "./ScrollableInfoSection.jsx";
 import PromoCard from "./PromoCard.jsx";
-
+import image1 from '../../assets/promocard2.png';
+import { FaStar, FaDollarSign, FaTrophy, FaCoins, FaRocket } from 'react-icons/fa';
 
 const Dashboard = () => {
     // const [amount, setAmount] = useState('');
@@ -12,6 +13,32 @@ const Dashboard = () => {
     //
     // const handleAmountChange = (e) => setAmount(e.target.value);
     // const handleCurrencyChange = (e) => setCurrency(e.target.value);
+    const flipContent1 = [
+        { text: "1st deposit: 100% up to 1 BTC", icon: <FaDollarSign className="text-green-500" /> },
+        { text: "+ 180 Free Spins", icon: <FaCoins className="text-yellow-500" /> },
+        { text: "20 Instant free spins + 160 (20 per day, starting in 24 hours)", icon: <FaStar className="text-blue-500" /> },
+        { text: "A minimum deposit of 0.0004 BTC is required to receive the 180 free spins.", icon: <FaRocket className="text-red-500" /> },
+        { text: "Minimum deposit to receive only the bonus is 0.0003 BTC.", icon: <FaRocket className="text-red-500" /> },
+        { text: "Bonus Terms & Conditions", icon: <FaTrophy className="text-orange-500" /> },
+    ];
+
+    const flipContent2 = [
+        { text: "Cash inside: $5.00", icon: <FaDollarSign className="text-green-500" /> },
+        { text: "Rules: Play any game to get the right hammer and break your Piggy!", icon: <FaCoins className="text-yellow-500" /> },
+        { text: "Type: Loyalty Program", icon: <FaStar className="text-blue-500" /> },
+        { text: "Contributing Games: All", icon: <FaTrophy className="text-orange-500" /> },
+        { text: "Piggy will reset in: 29d 23:52:47", icon: <FaRocket className="text-red-500" /> },
+        { text: "Terms & Conditions", icon: <FaTrophy className="text-orange-500" /> },
+    ];
+
+    const flipContent3 = [
+        { text: "Prize Pool: €5,000 & 5,000 Free Spins", icon: <FaTrophy className="text-orange-500" /> },
+        { text: "Places Paid: 150 (1st prize - €1,500)", icon: <FaCoins className="text-yellow-500" /> },
+        { text: "Type: Slot Tournament", icon: <FaStar className="text-blue-500" /> },
+        { text: "Frequency: Weekly", icon: <FaRocket className="text-red-500" /> },
+        { text: "Contributing Games: Play any slot game and earn points", icon: <FaTrophy className="text-orange-500" /> },
+        { text: "Terms & Conditions", icon: <FaTrophy className="text-orange-500" /> },
+    ];
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
@@ -84,33 +111,18 @@ const Dashboard = () => {
                 <GameCarousel/>
             </section>
 
-            {/* Promotions Section */}
             <section className="py-5 px-2 md:px-4">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">Promotions</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <PromoCard
-                        frontTitle="5 BTC + 180 Free Spins"
-                        backTitle="Exclusive Offer!"
-                        backDescription="Get 5 BTC and 180 Free Spins on your first deposit!"
-                    />
-                    <PromoCard
-                        frontTitle="100% Welcome Bonus"
-                        backTitle="New Player Bonus"
-                        backDescription="Double your first deposit with our 100% Welcome Bonus!"
-                    />
-                    <PromoCard
-                        frontTitle="VIP Membership"
-                        backTitle="Join the VIP Club"
-                        backDescription="Enjoy special rewards and bonuses as a VIP member."
-                    />
-                    <PromoCard
-                        frontTitle="Daily Free Spins"
-                        backTitle="Spin to Win!"
-                        backDescription="Claim your daily free spins and win big prizes!"
-                    />
+                    <PromoCard title="5 BTC + 180 Free Spins"
+                               color="bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600"
+                               flipContent={flipContent1}/>
+                    <PromoCard title="Your Piggy Bank" image={image1} flipContent={flipContent2}/>
+                    <PromoCard title="Slot Wars" color="bg-gradient-to-r from-blue-500 via-purple-600 to-blue-500"
+                               flipContent={flipContent3}/>
+                    <PromoCard title="Fourth Card" image={image1}/>
                 </div>
             </section>
-
 
             {/* Why Choose Us Section */}
             <section className="py-10 md:py-16 px-4 md:px-6 text-center">

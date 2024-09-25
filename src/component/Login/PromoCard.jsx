@@ -1,49 +1,54 @@
 import { useState } from 'react';
+import { AiOutlineInfoCircle, AiOutlineClose } from 'react-icons/ai';
 
-const PromoCard = () => {
+const PromoCard = ({ title, color, image, flipContent }) => {
     const [flipped, setFlipped] = useState(false);
 
-    const handleFlip = () => {
+    const handleFlip = (e) => {
+        // Prevent flipping when clicking on info or close icons
+        if (e.target.className.includes('info-icon') || e.target.className.includes('close-icon')) {
+            return;
+        }
         setFlipped(!flipped);
     };
 
     return (
-        <div
-            className={`relative w-full h-64 md:h-80 bg-gradient-to-r from-pink-600 via-indigo-900 to-pink-600 rounded-lg transform ${flipped ? 'rotate-y-180' : ''
-            } transition-transform duration-500 cursor-pointer perspective`}
-            onClick={handleFlip}
-        >
-            <div className={`absolute inset-0 p-6 flex flex-col justify-center items-center text-white text-center ${flipped ? 'hidden' : 'block'}`}>
-                <h4 className="text-2xl font-bold mb-2">5 BTC + 180 Free Spins</h4>
-            </div>
-
-            {/* Back Side of the card */}
-            <div
-                className={`absolute inset-0 p-6 flex flex-col justify-center items-center text-white text-center bg-gray-800 rounded-lg transform rotate-y-180 ${flipped ? 'block' : 'hidden'
-                }`}
-            >
-                <h4 className="text-xl font-bold mb-4">Welcome Package</h4>
-                <table className="text-left text-white bg-gray-700 rounded-lg w-full">
-                    <tbody>
-                    <tr className="border-b border-gray-600">
-                        <td className="p-2">1st Deposit</td>
-                        <td className="p-2">50% up to 1 BTC</td>
-                    </tr>
-                    <tr className="border-b border-gray-600">
-                        <td className="p-2">2nd Deposit</td>
-                        <td className="p-2">50% up to 2 BTC</td>
-                    </tr>
-                    <tr className="border-b border-gray-600">
-                        <td className="p-2">3rd Deposit</td>
-                        <td className="p-2">25% up to 3 BTC</td>
-                    </tr>
-                    <tr>
-                        <td className="p-2">4th Deposit</td>
-                        <td className="p-2">25% up to 4 BTC</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div className={`relative w-30 h-80 ${color} cursor-pointer`} onClick={handleFlip}>
+            {flipped ? (
+                <div className="absolute inset-0 bg-gray-800 text-white flex flex-col justify-center items-start p-4 rounded-lg">
+                    <AiOutlineClose
+                        onClick={() => setFlipped(false)}
+                        className="absolute top-2 right-2 text-black text-xl cursor-pointer hover:text-gray-700 transition-colors"
+                    />
+                    <h4 className="text-xl font-bold mb-2">Welcome Package</h4>
+                    <div className="space-y-2">
+                        {flipContent.map((item, index) => (
+                            <div key={index} className="flex items-center">
+                                {item.icon} {/* Render Font Awesome icon */}
+                                <span className="ml-2">{item.text}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-300 transition-colors">
+                        Become an active player
+                    </button>
+                </div>
+            ) : (
+                <div className="absolute inset-0 flex flex-col justify-center items-center">
+                    {image ? (
+                        <img src={image} alt="Promotion" className="w-full h-full object-cover rounded-lg" />
+                    ) : (
+                        <h2 className="text-2xl font-bold">{title}</h2>
+                    )}
+                    <AiOutlineInfoCircle
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setFlipped(true);
+                        }}
+                        className="absolute top-2 right-2 text-yellow-400 text-xl cursor-pointer hover:text-yellow-300 transition-colors"
+                    />
+                </div>
+            )}
         </div>
     );
 };
