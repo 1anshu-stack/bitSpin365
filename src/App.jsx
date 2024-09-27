@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './component/Header'; // Import the Header component
-import LandingPage from './component/LandingPage'; // Import the LandingPage component
+import LandingPage from './LandingPage'; // Import the LandingPage component
 import Signup from './component/Signup'; // Import the Signup component
 import Login from './component/Login'; // Import the Login component
 import AddDetails from './component/AddDetails'; //import the AddDetails component

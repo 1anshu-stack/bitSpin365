@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Bonus from '../assets/Bonus.jpg'; // Example background image path
 import axios from 'axios';
@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import AddDetails from './AddDetails';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../APIs/Api';
+import Login from "./Login.jsx";
 
 
 const Signup = ({ onClose }) => {
@@ -21,11 +22,11 @@ const Signup = ({ onClose }) => {
     const [errors, setErrors] = useState({});
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // Track if user has submitted signup
-    //add const for success(false)/isRegistered and error message('')
+
     const [errorMessage, setErrorMessage] = useState('');
-    const [showAddDetails, setShowAddDetails] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const [isLogin, setIsLogin] = useState(false);
 
     const modalRef = useRef(null);
     //add formRef(null)
@@ -181,6 +182,14 @@ const Signup = ({ onClose }) => {
 
     const cancelClose = () => setShowConfirmationDialog(false);
 
+    const handleLoginClick = () => {
+        setIsLogin(true); // Switch to signup mode when the link is clicked
+    };
+
+// Render the Signup component if isSignup is true
+    if (isLogin) {
+        return <Login onClose={onClose} />;
+    }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
@@ -205,7 +214,7 @@ const Signup = ({ onClose }) => {
                     </button>
 
                     {!isRegistered ? (
-                        <form ref={ formRef } onSubmit={handleSubmit} className="space-y-6">
+                        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                             <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-6">Welcome to
                                 Bitspin365!</h2>
 
@@ -289,9 +298,16 @@ const Signup = ({ onClose }) => {
                             >
                                 {mutation.isLoading ? 'signing Up...' : 'Sign Up'}
                             </button>
+                            <button
+                                type="button"
+                                onClick={handleLoginClick}
+                                className="block mx-auto text-gray-500 hover:underline"
+                            >
+                                Already a user?LOGIN
+                            </button>
                         </form>
                     ) : (
-                        <AddDetails />
+                        <AddDetails/>
                     )}
                 </div>
             </div>

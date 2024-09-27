@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import BigWin from '../assets/BigWin.jpg';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../APIs/Api'
+import Signup from "./Signup.jsx";
 
 
 const getCsrfTokenFromCookie = () => {
@@ -29,6 +30,8 @@ const resetPassword = async (email) => {
   return response.data;
 };
 
+
+
 const Login = ({ onClose }) => {
   const [formData, setFormData] = useState({
     email: '',
@@ -37,6 +40,7 @@ const Login = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isReset, setIsReset] = useState(false);
   const [token, setToken] = useState(sessionStorage.getItem('token') || '');
+  const [isSignup, setIsSignup] = useState(false);
 
   const modalRef = useRef(null);
 
@@ -97,6 +101,14 @@ const Login = ({ onClose }) => {
     }
   };
 
+  const handleSignupClick = () => {
+    setIsSignup(true); // Switch to signup mode when the link is clicked
+  };
+
+// Render the Signup component if isSignup is true
+  if (isSignup) {
+    return <Signup onClose={onClose} />;
+  }
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -194,6 +206,13 @@ const Login = ({ onClose }) => {
                   className="block mx-auto text-gray-500 hover:underline mb-4"
                 >
                   Forgot password?
+                </button>
+                <button
+                    type="button"
+                    onClick={handleSignupClick}
+                    className="block mx-auto text-gray-500 hover:underline"
+                >
+                  New user? SIGNUP
                 </button>
               </>
             ) : (

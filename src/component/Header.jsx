@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaQuestionCircle, FaStar } from 'react-icons/fa';
-import AuthForm from '../AuthForm.jsx'; // Import AuthForm
+import Login from './Login.jsx'; // Import Login component
+import Signup from './Signup.jsx'; // Import Signup component
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [showAuthForm, setShowAuthForm] = useState(false);
-    const [authFormType, setAuthFormType] = useState('login'); // 'login' or 'signup'
+    const [showLogin, setShowLogin] = useState(false); // For login component
+    const [showSignup, setShowSignup] = useState(false); // For signup component
     const [promotionsOpen, setPromotionsOpen] = useState(false);
     const [supportOpen, setSupportOpen] = useState(false);
 
@@ -24,13 +25,19 @@ const Header = () => {
         setPromotionsOpen(false); // Close promotions dropdown if support is opened
     };
 
-    const openAuthForm = (type) => {
-        setAuthFormType(type);
-        setShowAuthForm(true);
+    const openLogin = () => {
+        setShowLogin(true);
+        setShowSignup(false); // Close signup if it was open
     };
 
-    const closeAuthForm = () => {
-        setShowAuthForm(false);
+    const openSignup = () => {
+        setShowSignup(true);
+        setShowLogin(false); // Close login if it was open
+    };
+
+    const closeForms = () => {
+        setShowLogin(false);
+        setShowSignup(false);
     };
 
     useEffect(() => {
@@ -58,10 +65,10 @@ const Header = () => {
                     <h1 className="text-3xl font-bold text-yellow-300">BitSpin365</h1>
                 </div>
                 <div className="nav-buttons flex gap-4">
-                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={() => openAuthForm('login')}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openLogin}>
                         Login
                     </button>
-                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={() => openAuthForm('signup')}>
+                    <button className="nav-button py-2 px-4 bg-red-700 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={openSignup}>
                         Signup
                     </button>
                 </div>
@@ -78,7 +85,6 @@ const Header = () => {
                             <FaHome className="text-yellow-300 mr-3" />
                             <a href="/" className="text-yellow-300">Home</a>
                         </li>
-
                         <li className="relative py-3 px-4 rounded-lg flex flex-col bg-gray-800 hover:bg-gray-700 transition duration-300">
                             <div className="flex justify-start items-center w-full cursor-pointer"
                                  onClick={togglePromotions}>
@@ -100,42 +106,13 @@ const Header = () => {
                                 </ul>
                             )}
                         </li>
-
-                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaPiggyBank className="text-yellow-300 mr-3" />
-                            <a href="/vip" className="text-yellow-300">Banking</a>
-                        </li>
-
-                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <FaStar className="text-yellow-300 mr-3" />
-                            <a href="/vip" className="text-yellow-300">VIP</a>
-                        </li>
-
-                        <li className="relative py-3 px-4 rounded-lg flex flex-col bg-gray-800 hover:bg-gray-700 transition duration-300">
-                            <div className="flex justify-start items-center w-full cursor-pointer"
-                                 onClick={toggleSupport}>
-                                <FaQuestionCircle className="text-yellow-300 mr-3"/>
-                                <span className="text-yellow-300">Support</span>
-                                <span
-                                    className={`transition-transform duration-300 text-yellow-300 ml-auto ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
-                            </div>
-                            {supportOpen && (
-                                <ul className="mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
-                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaQuestionCircle className="text-gray-400 mr-3" />
-                                        <a href="/support-contact" className="text-gray-400">Contact Us</a>
-                                    </li>
-                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
-                                        <FaQuestionCircle className="text-gray-400 mr-3" />
-                                        <a href="/support-faq" className="text-gray-400">FAQ</a>
-                                    </li>
-                                </ul>
-                            )}
-                        </li>
+                        {/* Additional nav items... */}
                     </ul>
                 </nav>
             )}
-            {showAuthForm && <AuthForm formType={authFormType} onClose={closeAuthForm} />}
+
+            {showLogin && <Login onClose={closeForms} />}
+            {showSignup && <Signup onClose={closeForms} />}
         </header>
     );
 };
