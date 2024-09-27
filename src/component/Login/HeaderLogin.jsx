@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaQuestionCircle, FaStar, FaBell, FaUserCircle, FaSearch, FaTimes } from 'react-icons/fa';
 
 
@@ -105,7 +105,7 @@ const HeaderLogin = () => {
             </div>
 
             {menuOpen && (
-                <nav className="dropdown-menu fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col transition-all duration-300">
+                <nav className="dropdown-menu fixed top-0 left-0 w-full sm:w-3/4 md:w-1/3 h-full bg-gray-900 bg-opacity-95 z-50 shadow-lg flex flex-col transition-all duration-300">
                     <div className="flex justify-between items-center px-4 py-3 border-b border-gray-700">
                         <h1 className="text-2xl font-bold text-yellow-300">BitSpin365</h1>
                         <button onClick={toggleMenu} className="text-white text-3xl">&times;</button>
