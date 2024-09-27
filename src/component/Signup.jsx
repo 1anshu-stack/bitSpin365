@@ -30,6 +30,11 @@ const Signup = ({ onClose }) => {
     const modalRef = useRef(null);
     //add formRef(null)
     const formRef = useRef(null);
+    const getCsrfTokenFromCookie = () => {
+      const cookies = document.cookie.split('; ');
+      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('CSRF_TOKEN='));
+      return csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -102,7 +107,13 @@ const Signup = ({ onClose }) => {
     //mutation hook for signup using mutationFn explicitly
     const mutation = useMutation({
         mutationFn: async (data) => {
-            const response = await axios.post(API_ENDPOINTS.SIGNUP, data);
+            const csrfToken = getCsrfTokenFromCookie();
+            const response = await axios.post(API_ENDPOINTS.SIGNUP, data,
+                {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
             return response.data;
         },
         onSuccess: (data) => {

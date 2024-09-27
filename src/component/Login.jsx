@@ -5,11 +5,20 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../APIs/Api'
 
+
+const getCsrfTokenFromCookie = () => {
+  const cookies = document.cookie.split('; ');
+  const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('CSRF_TOKEN='));
+  return csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+};
+
 // Define the mutation functions directly in the component file
 const login = async ({ email, password , token}) => {
+    const csrfToken = getCsrfTokenFromCookie();
   const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password}, {
       headers: {
             Authorization: `Bearer ${token}`,
+            'X-CSRF-TOKEN': csrfToken,
       },
   });
   return response.data;

@@ -20,18 +20,32 @@ const validationSchema = Joi.object({
   answer: Joi.string().required(),
 });
 
+const getCsrfTokenFromCookie = () => {
+  const cookies = document.cookie.split('; ');
+  const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('CSRF_TOKEN='));
+  return csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+};
+
 const ADD_DETAILS_MUTATION = async ({ details, context }) => {
-  const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, { details }, {
-    headers: context.headers,
-  });
-  return response.data;
+    const csrfToken = getCsrfTokenFromCookie();
+    const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, { details }, {
+        headers: {
+            ...context.headers,
+            'X-CSRF-TOKEN' : csrfToken
+        }
+    });
+    return response.data;
 };
 
 const FINALIZE_REGISTRATION_MUTATION = async ({ details, bannerID, tracker, context }) => {
-  const response = await axios.post(API_ENDPOINTS.FINALIZE_REGISTRATION, { details, bannerID, tracker }, {
-    headers: context.headers,
-  });
-  return response.data;
+    const csrfToken = getCsrfTokenFromCookie();
+    const response = await axios.post(API_ENDPOINTS.FINALIZE_REGISTRATION, { details, bannerID, tracker }, {
+        headers: {
+            ...context.headers,
+            'X-CSRF-TOKEN' : csrfToken
+        }
+    });
+    return response.data;
 };
 
 const AddDetails = () => {
@@ -66,7 +80,7 @@ const AddDetails = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const handleFinalizeRegistration = async () => {
       //call finalize registration mutation
-      finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker, context: { headers: { Authorization: `Bearer ${token}`} } }, {
+      finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker, context: { headers: { Authorization: `Bearer ${token}`, 'X-CSRF-TOKEN': getCsrfTokenFromCookie() } } }, {
           onSuccess: (data) => {
               console.log('registration finalized successfully:', data);
               navigate('/login', { replace: true });
@@ -91,7 +105,7 @@ const AddDetails = () => {
 
     if (token) {
       try {
-        await addDetailsMutate({ details, context: { headers: { Authorization: `Bearer ${token}`} } }, {
+        await addDetailsMutate({ details, context: { headers: { Authorization: `Bearer ${token}`, 'X-CSRF-TOKEN': getCsrfTokenFromCookie() } } }, {
           onSuccess: (data) => {
             console.log('Details added successfully!', data);
             setShowBannerTracker(true);
