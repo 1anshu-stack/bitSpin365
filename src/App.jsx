@@ -5,6 +5,7 @@ import LandingPage from './LandingPage'; // Import the LandingPage component
 import Signup from './component/Signup'; // Import the Signup component
 import Login from './component/Login'; // Import the Login component
 import AddDetails from './component/AddDetails'; //import the AddDetails component
+import Dashboard from './component/Login/Dashboard';
 
 
 class ErrorBoundary extends React.Component {
@@ -42,6 +43,7 @@ function App() {
                         <Route path="/signup" element={<Signup />} /> {/* Signup Page */}
                         <Route path="/login" element={<Login />} /> {/* Login Page */}
                         <Route path="/add-details" element={<AddDetails />} /> {/* AddDetails page} */}
+                        <Route path="/dashboard" element={<Dashboard />} />
                     </Routes>
                 </div>
             </ErrorBoundary>

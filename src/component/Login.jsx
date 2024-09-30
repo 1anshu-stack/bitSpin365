@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import BigWin from '../assets/BigWin.jpg';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../APIs/Api'
 import Signup from "./Signup.jsx";
+import Dashboard from '../component/Login/Dashboard.jsx';
 
 
 const getCsrfTokenFromCookie = () => {
@@ -58,12 +60,15 @@ const Login = ({ onClose }) => {
     };
   }, [onClose]);
 
+  const navigate = useNavigate();
+
   // Define the mutation hooks with explicit mutationFn and configuration object
   const loginMutation = useMutation({
     mutationFn: (data) => login(data),
     onSuccess: (data) => {
       // Handle successful login
       console.log('Login successful:', data);
+      navigate('/dashboard');
     },
     onError: (error) => {
       // Handle login error

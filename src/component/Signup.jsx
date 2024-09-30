@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import AddDetails from './AddDetails';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../APIs/Api';
-import Login from "./Login.jsx";
+import Login from "./Login";
 
 
 const Signup = ({ onClose }) => {
@@ -33,8 +33,10 @@ const Signup = ({ onClose }) => {
     const formRef = useRef(null);
     const getCsrfTokenFromCookie = () => {
       const cookies = document.cookie.split('; ');
-      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('CSRF_TOKEN='));
-      return csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('XSRF-TOKEN='));
+      const token =  csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+      console.log('cookie csrfToken: ', token);
+      return token;
     };
 
     useEffect(() => {
@@ -112,8 +114,9 @@ const Signup = ({ onClose }) => {
             const response = await axios.post(API_ENDPOINTS.SIGNUP, data,
                 {
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken,
+                    'X-XSRF-TOKEN': csrfToken,
                 },
+            withCredentials: true,
             });
             return response.data;
         },
