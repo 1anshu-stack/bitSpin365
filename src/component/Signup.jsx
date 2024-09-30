@@ -194,10 +194,10 @@ const Signup = ({ onClose }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
                 ref={modalRef}
-                className="bg-white rounded-lg w-full max-w-4xl h-100% md:h-4/5 overflow-auto shadow-lg flex flex-col md:flex-row"
+                className="bg-white rounded-lg w-full max-w-6xl h-full  md:h-auto overflow-auto shadow-lg flex flex-col md:flex-row"
             >
                 {/* Image Section */}
-                <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden bg-gray-200">
+                <div className="w-full md:w-1/2 h-68 md:h-100 flex items-center justify-center overflow-hidden bg-gray-200">
                     <img src={Bonus} alt="Signup Background" className="w-full h-full object-cover"/>
                 </div>
 

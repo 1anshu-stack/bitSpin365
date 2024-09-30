@@ -5,14 +5,14 @@ import GameCarousel from './component/GameCarousel.jsx';
 import JackpotSection from './component/JackpotSection.jsx';
 import FeedbackCard from './component/FeedbackCard.jsx';
 import ResponsiveBox from "./component/ResponsiveBox.jsx";
-import AuthForm from './AuthForm.jsx'; // Import AuthForm
+import Signup from "./component/Signup.jsx";
 
 const LandingPage = () => {
     const [activeCard, setActiveCard] = useState(null);
     const [animationPaused, setAnimationPaused] = useState(false);
     const [amount, setAmount] = useState('');
     const [currency, setCurrency] = useState('USD');
-    const [showAuthForm, setShowAuthForm] = useState(false); // State for dialog visibility
+    const [isSignupOpen, setIsSignupOpen] = useState(false); // State to track signup form visibility
 
     const handleCardClick = (index) => {
         setActiveCard(index);
@@ -28,8 +28,9 @@ const LandingPage = () => {
 
     const handleAmountChange = (e) => setAmount(e.target.value);
     const handleCurrencyChange = (e) => setCurrency(e.target.value);
-    const handleCloseAuthForm = () => {
-        setShowAuthForm(false);
+
+    const handleSignupClick = () => {
+        setIsSignupOpen(!isSignupOpen); // Toggle signup form visibility
     };
 
     const feedbacks = [
@@ -41,8 +42,6 @@ const LandingPage = () => {
         { name: 'Ronnie', rating: 5, feedback: 'The best platform for online gaming!' },
         { name: 'John', rating: 4, feedback: 'Everything about this game is top-tier.' },
     ];
-
-    const toggleAuthForm = () => setShowAuthForm(!showAuthForm);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
@@ -154,13 +153,20 @@ const LandingPage = () => {
                         Play the spins for a chance to win one of the BitSpin365 Jackpots!
                     </p>
                     <button
-                        onClick={toggleAuthForm}
+                        onClick={handleSignupClick} // Toggle the signup form visibility
                         className="mt-6 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
                     >
                         Signup Now!
                     </button>
                 </div>
             </section>
+
+            {/* Conditionally render the Signup form */}
+            {isSignupOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <Signup />
+                </div>
+            )}
 
             <section className="py-10 md:py-16 px-4 md:px-6 text-center">
                 <h3 className="text-2xl md:text-3xl font-bold mb-8">Why Choose Us?</h3>
@@ -174,23 +180,11 @@ const LandingPage = () => {
                         <p>Our dedicated support team is available around the clock to assist you with any queries.</p>
                     </div>
                     <div className="bg-gray-800 rounded-lg p-4 md:p-6 hover:bg-gray-700">
-                        <h4 className="text-lg md:text-xl font-bold mb-2">Exciting Rewards</h4>
-                        <p>Enjoy fantastic bonuses and rewards that enhance your gaming experience.</p>
+                        <h4 className="text-lg md:text-xl font-bold mb-2">Top-Notch Security</h4>
+                        <p>Your personal and financial information is safe with our state-of-the-art encryption technology.</p>
                     </div>
                 </div>
             </section>
-
-            <footer className="bg-gray-800 py-4 md:py-6 text-center text-white">
-                <p>&copy; 2024 BitSpin365</p>
-                <p>All rights reserved.</p>
-            </footer>
-
-            {/* AuthForm Dialog */}
-            {showAuthForm && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-                    <AuthForm onClose={handleCloseAuthForm} />
-                </div>
-            )}
         </div>
     );
 };

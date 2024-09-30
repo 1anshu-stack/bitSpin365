@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BitSpin365_logo from '../assets/BitSpin365_logo.png';
-import AuthForm from '../AuthForm'; // Adjust path as needed
+import Login from "./Login.jsx"; // Adjust path as needed
 
 const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handleCurrencyChange }) => {
-    const [showAuthForm, setShowAuthForm] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
 
     const handleOpenAuthForm = () => {
-        setShowAuthForm(true);
+        setShowLogin(true);
     };
 
     const handleCloseAuthForm = () => {
-        setShowAuthForm(false);
+        setShowLogin(false);
     };
 
     return (
@@ -58,8 +58,8 @@ const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handl
             </div>
 
             {/* Render AuthForm Component */}
-            {showAuthForm && (
-                <AuthForm onClose={handleCloseAuthForm} />
+            {showLogin && (
+                <Login onClose={handleCloseAuthForm} />
             )}
         </div>
     );

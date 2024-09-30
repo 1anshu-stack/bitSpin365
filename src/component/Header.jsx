@@ -85,6 +85,7 @@ const Header = () => {
                             <FaHome className="text-yellow-300 mr-3" />
                             <a href="/" className="text-yellow-300">Home</a>
                         </li>
+
                         <li className="relative py-3 px-4 rounded-lg flex flex-col bg-gray-800 hover:bg-gray-700 transition duration-300">
                             <div className="flex justify-start items-center w-full cursor-pointer"
                                  onClick={togglePromotions}>
@@ -106,7 +107,38 @@ const Header = () => {
                                 </ul>
                             )}
                         </li>
-                        {/* Additional nav items... */}
+
+                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaPiggyBank className="text-yellow-300 mr-3" />
+                            <a href="/vip" className="text-yellow-300">Banking</a>
+                        </li>
+
+                        <li className="py-3 px-4 rounded-lg flex items-center bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <FaStar className="text-yellow-300 mr-3" />
+                            <a href="/vip" className="text-yellow-300">VIP</a>
+                        </li>
+
+                        <li className="relative py-3 px-4 rounded-lg flex flex-col bg-gray-800 hover:bg-gray-700 transition duration-300">
+                            <div className="flex justify-start items-center w-full cursor-pointer"
+                                 onClick={toggleSupport}>
+                                <FaQuestionCircle className="text-yellow-300 mr-3"/>
+                                <span className="text-yellow-300">Support</span>
+                                <span
+                                    className={`transition-transform duration-300 text-yellow-300 ml-auto ${promotionsOpen ? 'rotate-180' : ''}`}>▼</span>
+                            </div>
+                            {supportOpen && (
+                                <ul className="mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaQuestionCircle className="text-gray-400 mr-3" />
+                                        <a href="/support-contact" className="text-gray-400">Contact Us</a>
+                                    </li>
+                                    <li className="py-2 px-4 rounded-lg flex items-center hover:bg-gray-700 transition duration-200">
+                                        <FaQuestionCircle className="text-gray-400 mr-3" />
+                                        <a href="/support-faq" className="text-gray-400">FAQ</a>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
                     </ul>
                 </nav>
             )}
