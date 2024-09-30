@@ -1,9 +1,9 @@
  import { useState } from 'react';
 import GameCarousel from '../GameCarousel.jsx';
 import JackpotSection from '../JackpotSection.jsx';
-import DepositBox from "./DepositBox.jsx";
-import ScrollableInfoSection from "./ScrollableInfoSection.jsx";
-import PromoCard from "./PromoCard.jsx";
+import DepositBox from "./LComponents/DepositBox.jsx";
+import ScrollableInfoSection from "./LComponents/ScrollableInfoSection.jsx";
+import PromoCard from "./LComponents/PromoCard.jsx";
 import image1 from '../../assets/promocard2.png';
 import { FaStar, FaDollarSign, FaTrophy, FaCoins, FaRocket } from 'react-icons/fa';
 

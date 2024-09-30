@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './component/Header'; // Import the Header component
-import LandingPage from './LandingPage'; // Import the LandingPage component
-import Signup from './component/Signup'; // Import the Signup component
-import Login from './component/Login'; // Import the Login component
-import AddDetails from './component/AddDetails'; //import the AddDetails component
-import Dashboard from './component/Login/Dashboard';
+import LandingPage from './pages/LandingPage'; // Import the LandingPage component
+import Signup from './pages/Signup'; // Import the Signup component
+import Login from './pages/Login'; // Import the Login component
+import AddDetails from './pages/AddDetails'; //import the AddDetails component
+import Dashboard from './component/Lobby/Dashboard';
 
 
 class ErrorBoundary extends React.Component {

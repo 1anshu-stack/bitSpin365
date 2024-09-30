@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import BitSpin365_logo from '../assets/BitSpin365_logo.png';
-import Login from "./Login.jsx"; // Adjust path as needed
+import Login from "../pages/Login.jsx"; // Adjust path as needed
 
 const ResponsiveBox = ({ openSignup, amount, handleAmountChange, currency, handleCurrencyChange }) => {
     const [showLogin, setShowLogin] = useState(false);

@@ -86,8 +86,8 @@ const AddDetails = () => {
       finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker, context: { headers: { Authorization: `Bearer ${token}`, 'X-XSRF-TOKEN': getCsrfTokenFromCookie() } } }, {
           onSuccess: (data) => {
               console.log('registration finalized successfully:', data);
-              navigate('/login', { replace: true });
               alert('registered successfully!');
+              navigate('/login', { replace: true });
           },
           onError: (error) => {
               console.log('error finalizing registration:', error);
@@ -152,7 +152,7 @@ const AddDetails = () => {
                     onChange={(e) => setDetails({ ...details, fname: e.target.value })}
                     placeholder="First Name"
                     className={`w-full p-3 border ${
-                        validationErrors.lname ? 'border-red-500' : 'border-gray-300'
+                        validationErrors.fname ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:outline-none focus:ring focus:ring-yellow-500`}
                   />
                 </div>

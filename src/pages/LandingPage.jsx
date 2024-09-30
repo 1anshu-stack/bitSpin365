@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import img from './assets/mainpagepic.png';
-import GameCarousel from './component/GameCarousel.jsx';
-import JackpotSection from './component/JackpotSection.jsx';
-import FeedbackCard from './component/FeedbackCard.jsx';
-import ResponsiveBox from "./component/ResponsiveBox.jsx";
-import Signup from "./component/Signup.jsx";
+import img from '../assets/mainpagepic.png';
+import GameCarousel from '../component/GameCarousel.jsx';
+import JackpotSection from '../component/JackpotSection.jsx';
+import FeedbackCard from '../component/FeedbackCard.jsx';
+import ResponsiveBox from "../component/ResponsiveBox.jsx";
+import Signup from "./Signup.jsx";
 
 const LandingPage = () => {
     const [activeCard, setActiveCard] = useState(null);

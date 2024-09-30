@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaQuestionCircle, FaStar } from 'react-icons/fa';
-import Login from './Login.jsx'; // Import Login component
-import Signup from './Signup.jsx'; // Import Signup component
+import Login from '../pages/Login.jsx'; // Import Login component
+import Signup from '../pages/Signup.jsx'; // Import Signup component
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);

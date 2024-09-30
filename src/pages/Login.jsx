@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../APIs/Api'
 import Signup from "./Signup.jsx";
-import Dashboard from '../component/Login/Dashboard.jsx';
+import Dashboard from '../component/Lobby/Dashboard.jsx';
 
 
 const getCsrfTokenFromCookie = () => {
-  const cookies = document.cookie.split('; ');
-  const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('CSRF_TOKEN='));
-  return csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
-};
+      const cookies = document.cookie.split('; ');
+      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('XSRF-TOKEN='));
+      const token =  csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
+      console.log('cookie csrfToken: ', token);
+      return token;
+    };
 
 // Define the mutation functions directly in the component file
 const login = async ({ email, password , token}) => {
@@ -21,7 +23,7 @@ const login = async ({ email, password , token}) => {
   const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password}, {
       headers: {
             Authorization: `Bearer ${token}`,
-            'X-CSRF-TOKEN': csrfToken,
+            'X-XSRF-TOKEN': csrfToken,
       },
   });
   return response.data;
