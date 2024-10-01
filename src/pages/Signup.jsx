@@ -7,6 +7,7 @@ import AddDetails from './AddDetails';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../APIs/Api';
 import Login from "./Login";
+import axiosClient from '../configs/axiosClient';
 
 
 const Signup = ({ onClose }) => {
@@ -31,13 +32,6 @@ const Signup = ({ onClose }) => {
     const modalRef = useRef(null);
     //add formRef(null)
     const formRef = useRef(null);
-    const getCsrfTokenFromCookie = () => {
-      const cookies = document.cookie.split('; ');
-      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('XSRF-TOKEN='));
-      const token =  csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
-      console.log('cookie csrfToken: ', token);
-      return token;
-    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -110,25 +104,15 @@ const Signup = ({ onClose }) => {
     //mutation hook for signup using mutationFn explicitly
     const mutation = useMutation({
         mutationFn: async (data) => {
-            const csrfToken = getCsrfTokenFromCookie();
-            const response = await axios.post(API_ENDPOINTS.SIGNUP, data,
-                {
-                headers: {
-                    'X-XSRF-TOKEN': csrfToken,
-                },
-            withCredentials: true,
-            });
+            const response = await axiosClient.post(API_ENDPOINTS.SIGNUP, data);
             return response.data;
         },
         onSuccess: (data) => {
             console.log('response data: ', data);
             sessionStorage.setItem('token', data.token);
             console.log('token: ', data.token);
-//             setIsRegistered(true);
-//             setErrorMessage('');
             console.log('navigating to add details page');
-            navigate({ ...location, pathname: '/add-details' });
-            console.log('navigating to add details page');
+            navigate('/add-details');
         },
         onError: (error) => {
             setErrorMessage(error.response?.data?.message || 'An error occurred during signup. Please try again later.');

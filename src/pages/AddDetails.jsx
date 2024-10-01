@@ -3,8 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import Bonus from '../assets/Bonus.jpg';
 import { useNavigate } from 'react-router-dom';
+import axiosClient from '../configs/axiosClient';
 import { API_ENDPOINTS } from '../APIs/Api';
 import Joi from 'joi';
+
 
 
 const validationSchema = Joi.object({
@@ -21,33 +23,13 @@ const validationSchema = Joi.object({
   answer: Joi.string().required(),
 });
 
-const getCsrfTokenFromCookie = () => {
-  const cookies = document.cookie.split('; ');
-  const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('XSRF-TOKEN='));
-  const token =  csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
-  console.log('CSRF Token:', token);
-  return token;
-};
-
-const ADD_DETAILS_MUTATION = async ({ details, context }) => {
-    const csrfToken = getCsrfTokenFromCookie();
-    const response = await axios.post(API_ENDPOINTS.ADD_DETAILS, { details }, {
-        headers: {
-            ...context.headers,
-            'X-XSRF-TOKEN' : csrfToken
-        }
-    });
+const ADD_DETAILS_MUTATION = async ({ details }) => {
+    const response = await axiosClient.post(API_ENDPOINTS.ADD_DETAILS, { details });
     return response.data;
 };
 
-const FINALIZE_REGISTRATION_MUTATION = async ({ details, bannerID, tracker, context }) => {
-    const csrfToken = getCsrfTokenFromCookie();
-    const response = await axios.post(API_ENDPOINTS.FINALIZE_REGISTRATION, { details, bannerID, tracker }, {
-        headers: {
-            ...context.headers,
-            'X-XSRF-TOKEN' : csrfToken
-        }
-    });
+const FINALIZE_REGISTRATION_MUTATION = async ({ details, bannerID, tracker}) => {
+    const response = await axiosClient.post(API_ENDPOINTS.FINALIZE_REGISTRATION, { details, bannerID, tracker });
     return response.data;
 };
 
@@ -81,9 +63,10 @@ const AddDetails = () => {
 
   const navigate = useNavigate();
   const [validationErrors, setValidationErrors] = useState({});
+
   const handleFinalizeRegistration = async () => {
       //call finalize registration mutation
-      finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker, context: { headers: { Authorization: `Bearer ${token}`, 'X-XSRF-TOKEN': getCsrfTokenFromCookie() } } }, {
+      finalizeRegistrationMutate({ details, bannerId: parseInt(bannerId),tracker}, {
           onSuccess: (data) => {
               console.log('registration finalized successfully:', data);
               alert('registered successfully!');
@@ -112,7 +95,7 @@ const AddDetails = () => {
 
     if (token) {
       try {
-        await addDetailsMutate({ details, context: { headers: { Authorization: `Bearer ${token}`, 'X-XSRF-TOKEN': getCsrfTokenFromCookie() } } }, {
+        await addDetailsMutate({ details}, {
           onSuccess: (data) => {
             console.log('Details added successfully!', data);
             setShowBannerTracker(true);

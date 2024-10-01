@@ -4,33 +4,20 @@ import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosClient from '../configs/axiosClient';
 import { API_ENDPOINTS } from '../APIs/Api'
 import Signup from "./Signup.jsx";
 import Dashboard from '../component/Lobby/Dashboard.jsx';
 
 
-const getCsrfTokenFromCookie = () => {
-      const cookies = document.cookie.split('; ');
-      const csrfTokenCookie = cookies.find((cookie) => cookie.startsWith('XSRF-TOKEN='));
-      const token =  csrfTokenCookie ? csrfTokenCookie.split('=')[1] : null;
-      console.log('cookie csrfToken: ', token);
-      return token;
-    };
-
 // Define the mutation functions directly in the component file
-const login = async ({ email, password , token}) => {
-    const csrfToken = getCsrfTokenFromCookie();
-  const response = await axios.post(API_ENDPOINTS.LOGIN, { email, password}, {
-      headers: {
-            Authorization: `Bearer ${token}`,
-            'X-XSRF-TOKEN': csrfToken,
-      },
-  });
+const login = async ({ email, password}) => {
+  const response = await axiosClient.post(API_ENDPOINTS.LOGIN, { email, password});
   return response.data;
 };
 
 const resetPassword = async (email) => {
-  const response = await axios.post('http://localhost:8080/casino/reset-password', { email });
+  const response = await axiosClient.post(API_ENDPOINTS.RESET_PASSWORD, { email });
   return response.data;
 };
 
@@ -68,26 +55,22 @@ const Login = ({ onClose }) => {
   const loginMutation = useMutation({
     mutationFn: (data) => login(data),
     onSuccess: (data) => {
-      // Handle successful login
-      console.log('Login successful:', data);
+      console.log('Login successful:', data); // Handle successful login
       navigate('/dashboard');
     },
     onError: (error) => {
-      // Handle login error
-      console.error('Login error:', error);
+      console.error('Login error:', error); // Handle login error
     },
   });
 
   const resetPasswordMutation = useMutation({
     mutationFn: (email) => resetPassword(email),
     onSuccess: (data) => {
-      // Handle successful password reset
-      console.log('Password reset email sent:', data);
+      console.log('Password reset email sent:', data); // Handle successful password reset
       setIsReset(false); // Return to login
     },
     onError: (error) => {
-      // Handle password reset error
-      console.error('Password reset error:', error);
+      console.error('Password reset error:', error); // Handle error for password reset
     },
   });
 
@@ -104,7 +87,7 @@ const Login = ({ onClose }) => {
     if (isReset) {
       resetPasswordMutation.mutate(formData.email);
     } else {
-      loginMutation.mutate({...formData, token});
+      loginMutation.mutate({...formData});
     }
   };
 
