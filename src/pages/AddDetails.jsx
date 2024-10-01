@@ -98,8 +98,8 @@ const AddDetails = () => {
         await addDetailsMutate({ details}, {
           onSuccess: (data) => {
             console.log('Details added successfully!', data);
+            alert('Details added successfully!');
             setShowBannerTracker(true);
-            handleFinalizeRegistration();
           },
           onError: (error) => {
               console.error('Error adding your details:', error);
