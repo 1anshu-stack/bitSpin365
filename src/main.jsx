@@ -11,6 +11,8 @@ import Signup from "./pages/Signup.jsx";
 import AddDetails from "./pages/AddDetails.jsx";
 import Dashboard from "./component/Lobby/Dashboard.jsx";
 
+
+
 // Create a Query Client instance
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -22,10 +24,10 @@ const router = createBrowserRouter([
             {path:'/signup', element: <Signup />,},
             {path:'/add-details', element: <AddDetails />,},
             {path:'/dashboard', element: <Dashboard />,},
-
         ]
     },
 ])
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

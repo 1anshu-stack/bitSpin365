@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaHome, FaGift, FaPiggyBank, FaDollarSign, FaQuestionCircle, FaStar } from 'react-icons/fa';
 import Login from '../pages/Login.jsx'; // Import Login component
 import Signup from '../pages/Signup.jsx'; // Import Signup component
